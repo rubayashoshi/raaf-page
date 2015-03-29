@@ -1,0 +1,7 @@
+parameters:
+#    RAAFPAGE_user.example.class: RAAFPAGE\UserBundle\Example
+
+services:
+#    RAAFPAGE_user.example:
+#        class: %RAAFPAGE_user.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

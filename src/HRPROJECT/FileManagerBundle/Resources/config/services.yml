@@ -1,0 +1,16 @@
+services:
+#    file_manager_bundle.asset_manager:
+#        class: HRPROJECT\FileManagerBundle\Service\AssetManager
+#        arguments:
+#          - %aws_access_key%
+#          - %aws_secret_key%
+#          - %aws_end_point%
+#          - %amazon_s3_bucket_name%
+#          - %file_storage_location%
+#          - @doctrine.orm.entity_manager
+#    file_manager_bundle.document_manager:
+#        class: HRPROJECT\FileManagerBundle\Service\DocumentManager
+#        arguments:
+#          - %file_storage_location%
+#          - @doctrine.orm.entity_manager
+#          - @logger

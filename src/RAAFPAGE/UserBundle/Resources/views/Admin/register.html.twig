@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}RAAF PAGE{% endblock %}
+{% block content %}
+    <form id='register' action='' method='post' accept-charset='UTF-8'>
+        {{ form_errors(form) }}
+        {{ form_row( form.email, { 'label': 'E-Mail:' } ) }}
+
+        {{ form_errors( form.password ) }}
+        {{ form_row( form.password.first, { 'label': 'Your password:' } ) }}
+        {{ form_row( form.password.second, { 'label': 'Repeat Password:' } ) }}
+
+        {{ form_row( form.username, { 'label': 'Username:' } ) }}
+
+        {{ form_rest( form ) }}
+    </form>
+    {#Add a new user to the system#}
+    {#{{ errors }}#}
+    {#{{ form(form) }}#}
+{% endblock %}

@@ -1,0 +1,9 @@
+RAAFPAGE_user:
+    resource: "@RAAFPAGEUserBundle/Resources/config/routing.yml"
+    prefix:   /
+RAAFPAGE_user:
+    resource: "@RAAFPAGEFileManagerBundle/Resources/config/routing.yml"
+    prefix:   secured/document/
+post:
+    resource: "@RAAFPAGEFileManagerBundle/Controller/TopicController.php"
+    type:     annotation

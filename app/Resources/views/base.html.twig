@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html"; charset=utf-8" />
+        <title>{% block title %}HR PROJECT{% endblock %} - HR PROJECT</title>
+        {% block stylesheets %}
+            <link href="{{ asset('css/screen.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('css/registration.css') }}" type="text/css" rel="stylesheet" />
+        {% endblock %}
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+
+    <div id="container">
+        <div id="header">
+            <h1>
+                MATCH GROOM WITH BRIDE
+            </h1>
+        </div>
+        <div id="navigation">
+            <ul>
+                {% if app.user %}
+                    <li><a href="#">HOME</a></li>
+                    <li><a href="{{path('logout')}}">LOGOUT</a></li>
+                    <li><a href="#">MY ACCOUNT</a></li>
+                    <li><a href="#">INBOX</a></li>
+                {% else %}
+                {# Menu for logged in member#}
+                    <li><a href="#">HOME</a></li>
+                    <li><a href="#">REGISTER</a></li>
+                    <li><a href="{{ path('login') }}">MEMBER LOGIN</a></li>
+                    <li><a href="#">SEARCH</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div id="content-container">
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+            <div id="aside">
+                <h3>
+                    Aside heading
+                </h3>
+                <p>
+                    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan.
+                </p>
+            </div>
+            <div id="footer">
+                Copyright © Site name, 20XX
+            </div>
+        </div>
+    </div>
+
+
+
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

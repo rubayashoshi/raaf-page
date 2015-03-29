@@ -1,0 +1,6 @@
+hrproject_file_manager_upload_document:
+    path:     /upload
+    defaults: { _controller: HRPROJECTFileManagerBundle:Default:upload }
+hrproject_file_manager_document_list:
+    path:     /list
+    defaults: { _controller: HRPROJECTFileManagerBundle:Default:list }
