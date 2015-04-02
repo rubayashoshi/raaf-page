@@ -1,7 +1,0 @@
-parameters:
-#    hrproject_user.example.class: HRPROJECT\UserBundle\Example
-
-services:
-#    hrproject_user.example:
-#        class: %hrproject_user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

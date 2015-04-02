@@ -1,5 +1,0 @@
-{% for document in documents %}
-    <img src="{{ asset(document.path ~ '/' ~ document.name) }}"><br/>
-{% endfor %}
-
-<a href="{{ path('hrproject_file_manager_upload_document') }}">Upload a new document</a>
