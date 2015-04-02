@@ -1,3 +1,8 @@
+raafpage_ad:
+    resource: "@RAAFPAGEAdBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 RAAFPAGE_user:
     resource: "@RAAFPAGEUserBundle/Resources/config/routing.yml"
     prefix:   /

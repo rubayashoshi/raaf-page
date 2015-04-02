@@ -18,7 +18,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new RAAFPAGE\UserBundle\RAAFPAGEUserBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
-            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle()
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new RAAFPAGE\AdBundle\RAAFPAGEAdBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
