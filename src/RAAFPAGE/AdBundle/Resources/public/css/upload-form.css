@@ -1,3 +1,9 @@
+.body{
+    background-color: #eaeaea;
+}
+.form-group .label {
+    width: 200px;
+}
 .form-group input, textarea {
     padding: 9px;
     border: solid 1px #E5E5E5;
@@ -10,7 +16,7 @@
 textarea {
     width: 400px;
     max-width: 400px;
-    height: 350px;
+    height: 200px;
     line-height: 150%;
 }
 
@@ -22,7 +28,8 @@ input:focus, textarea:focus {
 .form-group label {
     margin-left: 10px;
     color: #999999;
-    min-width: 200px;
+    float: left;
+    width: 200px;
 }
 
 .submit input {
@@ -32,4 +39,8 @@ input:focus, textarea:focus {
     border: 0;
     font-size: 14px;
     color: #FFFFFF;
+}
+
+.error {
+    border-color:red;
 }

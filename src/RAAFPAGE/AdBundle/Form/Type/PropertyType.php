@@ -14,10 +14,13 @@ class PropertyType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title');
+        $builder->add('title','text', array(
+            'label' => 'Ad title'
+        ));
 
         $builder->add('description', 'textarea', array(
-            'attr' => array('class' => 'tinymce'),
+            'label' => 'Ad description',
+            'attr' => array('class' => 'tinymce')
         ));
 
         $builder->add('rent', 'money', array(
@@ -40,7 +43,15 @@ class PropertyType extends AbstractType
             'required' => false,
         ));
         $builder->add('contact_email', 'checkbox', array(
-            'label'    => 'Check if you want to be contacted with email',
+            'label'    => 'Contact ',
+            'required' => false,
+        ));
+        $builder->add('contact_phone_number', 'text', array(
+            'label'    => false,
+            'required' => false,
+        ));
+        $builder->add('contact_email_address', 'text', array(
+            'label'    => false,
             'required' => false,
         ));
 

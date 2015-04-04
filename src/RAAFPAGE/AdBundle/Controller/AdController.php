@@ -2,7 +2,6 @@
 
 namespace RAAFPAGE\AdBundle\Controller;
 
-use RAAFPAGE\AdBundle\Entity\AdType;
 use RAAFPAGE\AdBundle\Entity\Property;
 use RAAFPAGE\AdBundle\Form\Type\PropertyType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,7 +37,7 @@ class AdController extends Controller
 
         $types = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
             ->findAll();
-
+        $error = 's';
         if ($this->getRequest()->isMethod('POST')) {
             if ($form->isValid()) {
                 $property = $form->getData();
@@ -51,17 +50,20 @@ class AdController extends Controller
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($property);
                 $manager->flush();
+            } else {
+                $error = 'Form has some fields incomplete or missing,' .
+                    'please check and complete all required information.';
             }
         }
 
-        return array('form' => $form->createView(), 'types' => $types);
+        return array('form' => $form->createView(), 'types' => $types, 'error' => $error);
     }
 
     /**
      * @Route("/seller/add/edit/{id}", name="edit_add")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction($id=null)
     {
         if ($id) {
             $property = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Property')
@@ -75,7 +77,7 @@ class AdController extends Controller
 
         $types = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
             ->findAll();
-
+        $error = '';
         if ($this->getRequest()->isMethod('POST')) {
             if ($form->isValid()) {
                 /** @var Property $property */
@@ -93,9 +95,12 @@ class AdController extends Controller
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($property);
                 $manager->flush();
+            } else {
+                $error = 'Form has some fields incomplete or missing,' .
+                    'please check and complete all required information.';
             }
         }
 
-        return array('form' => $form->createView(), 'property' => $property, 'types' => $types);
+        return array('form' => $form->createView(), 'property' => $property, 'types' => $types, 'error' => $error);
     }
 }

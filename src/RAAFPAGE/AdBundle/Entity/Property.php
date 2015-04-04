@@ -3,6 +3,7 @@
 namespace RAAFPAGE\AdBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Annotations\Annotation\Enum;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -22,11 +23,15 @@ class Property
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(min=10)
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $title;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(min=100)
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $description;
@@ -40,7 +45,8 @@ class Property
 
     /**
      * @var float $rent
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(min=1)
      * @ORM\Column(name="rent", type="decimal", precision=2)
      */
     private $rent;
@@ -80,10 +86,22 @@ class Property
     private $contactName;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="contact_email_address", type="string", length=255, nullable=false)
+     */
+    private $contactEmailAddress = true;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", name="contact_phone_number", length=255, nullable=false)
+     */
+    private $contactPhoneNumber;
+
+    /**
      * @ORM\OneToMany(targetEntity="\RAAFPAGE\AdBundle\Entity\Image", mappedBy="property")
      **/
     private $images;
-
 
     /**
      * @ORM\ManyToMany(targetEntity="\RAAFPAGE\AdBundle\Entity\AdType", inversedBy="properties")
@@ -379,5 +397,37 @@ class Property
     public function setTitle($title)
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContactEmailAddress()
+    {
+        return $this->contactEmailAddress;
+    }
+
+    /**
+     * @param int $contactEmailAddress
+     */
+    public function setContactEmailAddress($contactEmailAddress)
+    {
+        $this->contactEmailAddress = $contactEmailAddress;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactPhoneNumber()
+    {
+        return $this->contactPhoneNumber;
+    }
+
+    /**
+     * @param string $contactPhoneNumber
+     */
+    public function setContactPhoneNumber($contactPhoneNumber)
+    {
+        $this->contactPhoneNumber = $contactPhoneNumber;
     }
 }

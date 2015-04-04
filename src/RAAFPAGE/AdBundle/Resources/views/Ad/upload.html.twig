@@ -102,6 +102,12 @@
         <error>{{ form_errors(form.property_type) }}</error>
         {{ form_widget(form.property_type) }}
     </p>
+    <p class="form-group">
+        {% for type in types %}
+            <label>{{ type.name }}</label>
+            <input type="checkbox" name="add_type[]" value="{{ type.id }}">
+        {% endfor %}
+    </p>
 
         <button type="submit">Save</button>
         {{ form_rest(form) }}

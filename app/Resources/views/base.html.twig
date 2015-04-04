@@ -8,6 +8,7 @@
             <link href="{{ asset('css/registration.css') }}" type="text/css" rel="stylesheet" />
         {% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        {% block layout_css %}{% endblock %}
     </head>
     <body>
 
@@ -18,28 +19,15 @@
             </h1>
         </div>
         <div id="navigation">
-            <ul>
-                {% if app.user %}
-                    <li><a href="#">HOME</a></li>
-                    <li><a href="{{path('logout')}}">LOGOUT</a></li>
-                    <li><a href="#">MY ACCOUNT</a></li>
-                    <li><a href="#">INBOX</a></li>
-                {% else %}
-                {# Menu for logged in member#}
-                    <li><a href="#">HOME</a></li>
-                    <li><a href="#">REGISTER</a></li>
-                    <li><a href="{{ path('login') }}">MEMBER LOGIN</a></li>
-                    <li><a href="#">SEARCH</a></li>
-                {% endif %}
-            </ul>
+            {% block navigation %}{% endblock %}
         </div>
         <div id="content-container">
             <div id="content">
                 {% block content %}{% endblock %}
             </div>
-            <div id="aside">
-                {% block aside %}{% endblock %}
-            </div>
+
+            {% block aside %}{% endblock %}
+
             <div id="footer">
                 Copyright © Site name, 20XX
             </div>

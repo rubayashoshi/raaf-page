@@ -4,175 +4,102 @@
     <form id="property_form" action="{{ path('edit_add', {'id': property.id}) }}" class="form-upload-add" novalidate
     method="post" {{ form_enctype(form) }}">
 
+    <div class="block-container">
+        {% if error != '' %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
         <p class="form-group">
-            {{ form_label(form.title, null, {'label_attr': {'title': 'Ad title'}}) }}
-            <error>{{ form_errors(form.title) }}</error>
+            {{ form_label(form.title, null, {'label_attr': {'title': 'Ad title', 'class':'label'}}) }}
             {{ form_widget(form.title) }}
         </p>
 
         <p class="form-group">
-            <label>
-                {{ form_label(form.rent, null, {'label_attr': {'title': 'Rent'}}) }}
-            </label>
+            {{ form_label(form.description, null, {'label_attr': {'title': 'Description'}}) }}
+            {{ form_widget(form.description, {'attr': {'class': 'textarea' }}) }}
+        </p>
+    </div>
+
+    <div class="block-container">
+        Images:
+    </div>
+
+    <div class="block-container">
+        <p class="form-group">
+            {{ form_label(form.rent, null, {'label_attr': {'title': 'Rent'}}) }}
             <error>{{ form_errors(form.rent) }}</error>
             {{ form_widget(form.rent) }}
         </p>
 
         <p class="form-group">
-            <label>
-                {{ form_label(form.description, null, {'label_attr': {'title': 'Rent'}}) }}
-            </label>
-            <error>{{ form_errors(form.description) }}</error>
-            {{ form_widget(form.description, {'attr': {'class': 'textarea' }}) }}
-        </p>
-
-        <p class="form-group">
-            <label>
-                {{ form_label(form.date_available, null, {'label_attr': {'title': 'Rent'}}) }}
-            </label>
+            {{ form_label(form.date_available, null, {'label_attr': {'title': 'Rent'}}) }}
             <error>{{ form_errors(form.date_available) }}</error>
             {{ form_widget(form.date_available) }}
         </p>
+    </div>
 
+    <div class="block-container">
         <p class="form-group">
-            <label>
-                {{ form_label(form.available_to_couple, null, {'label_attr': {'title': 'Rent'}}) }}
-            </label>
+            {{ form_label(form.available_to_couple, null, {'label_attr': {'title': 'Rent'}}) }}
             <error>{{ form_errors(form.available_to_couple) }}</error>
             {{ form_widget(form.available_to_couple) }}
         </p>
 
-
-
         <p class="form-group">
-            <label>
-                {{ form_label(form.contact_email, null, {'label_attr': {'title': 'Contact email'}}) }}
-            </label>
-            <error>{{ form_errors(form.contact_email) }}</error>
-            {{ form_widget(form.contact_email) }}
-        </p>
-        <p class="form-group">
-            <label>
-                {{ form_label(form.contact_name) }}
-            </label>
-            <error>{{ form_errors(form.contact_name) }}</error>
-            {{ form_widget(form.contact_name) }}
-        </p>
-        <p class="form-group">
-            <label>
-                {{ form_label(form.contact_phone) }}
-            </label>
-            <error>{{ form_errors(form.contact_phone) }}</error>
-            {{ form_widget(form.contact_phone) }}
-        </p>
-        <p class="form-group">
-            <label>
-                {{ form_label(form.is_agent) }}
-            </label>
+            {{ form_label(form.is_agent) }}
             <error>{{ form_errors(form.is_agent) }}</error>
             {{ form_widget(form.is_agent) }}
         </p>
-        <p class="form-group">
-            <label>
-                {{ form_label(form.available_to_couple, null, {'label_attr': {'title': 'Rent'}}) }}
-            </label>
-            <error>{{ form_errors(form.available_to_couple) }}</error>
-            {{ form_widget(form.available_to_couple) }}
-        </p>
     <p class="form-group">
-        <label>
-            {{ form_label(form.rent_period) }}
-        </label>
+        {{ form_label(form.rent_period) }}
         <error>{{ form_errors(form.rent_period) }}</error>
         {{ form_widget(form.rent_period) }}
     </p>
     <p class="form-group">
-        <label>
-            {{ form_label(form.link) }}
-        </label>
+        {{ form_label(form.link) }}
         <error>{{ form_errors(form.link) }}</error>
         {{ form_widget(form.link) }}
     </p>
     <p class="form-group">
-        <label>
-            {{ form_label(form.property_type) }}
-        </label>
+        {{ form_label(form.property_type) }}
         <error>{{ form_errors(form.property_type) }}</error>
         {{ form_widget(form.property_type) }}
     </p>
+    </div>
 
-    <p class="form-group">
+    <div class="block-container">
+        Please select at least one following option to be contacted by:<br>
+        <p class="form-group">
+            {{ form_widget(form.contact_email) }} Contact Email {{ form_widget(form.contact_email_address) }}
+        </p>
 
-    {% for type in types %}
-        {% set checked = '' %}
-        {% for t in property.adTypes %}
-            {% if t.id == type.id %}
-                {% set checked = 'checked == "checked"' %}
-            {% endif %}
-        {% endfor %}
-        <label>{{ type.name }}</label>
-        <input type="checkbox" name="add_type[]" value="{{ type.id }}" {{ checked }}>
+        <p class="form-group">
+            {{ form_widget(form.contact_phone) }} Contact Number {{ form_widget(form.contact_phone_number) }}
+        </p>
 
-    {% endfor %}
-    </p>
+        <p class="form-group">
+            Contact Name:   {{ form_widget(form.contact_name) }}
+        </p>
 
+        <p class="form-group">
 
-    {#<p class="form-group">#}
-        {#<label>#}
-            {#{{ form_label(form.adTypes) }}#}
-        {#</label>#}
-        {#<error>{{ form_errors(form.adTypes) }}</error>#}
-        {#{{ form_widget(form.adTypes) }}#}
-    {#</p>#}
+            {% for type in types %}
+                {% set checked = '' %}
+                {% for t in property.adTypes %}
+                    {% if t.id == type.id %}
+                        {% set checked = 'checked == "checked"' %}
+                    {% endif %}
+                {% endfor %}
+                <label>{{ type.name }}</label>
+                <input type="checkbox" name="add_type[]" value="{{ type.id }}" {{ checked }}>
 
-    {#<div>#}
-        {#<ul>#}
-            {#{% for r in form.adTypes %}#}
-                {#<li>#}
-                    {#{{ form_widget(form.adType) }}#}
-                    {#&#123;&#35;{{ form_label(form.adTypes) }}&#35;&#125;#}
-                {#</li>#}
-            {#{% endfor %}#}
-        {#</ul>#}
-    {#</div>#}
+            {% endfor %}
+        </p>
+    </div>
 
+    <div class="block-container">
         <button type="submit">Save</button>
         {{ form_rest(form) }}
+    </div>
     </form>
 
-
-    {#<form id="property_form" action="{{ path('upload_add') }}" class="form-upload-add" novalidate#}
-          {#method="post" {{ form_enctype(form) }}">#}
-
-        {#<div class="new-recipe-alert alert alert-danger hide">#}
-            {#Please fill all mandatory fields#}
-        {#</div>#}
-
-        {#<div class="form-group">#}
-            {#<label>#}
-                {#{{ form_label(form.title, null, { 'label_attr': {'data-placement' : 'right', 'data-toggle': 'tooltip', 'title' : 'This is the main title for your add'} } ) }}#}
-            {#</label>#}
-            {#{% if form_errors(form.title) is not empty %}<p class="text-danger">{{ form_errors(form.title) }}</p>{% endif %}#}
-            {#{{ form_widget(form.title, {'attr': {'class': 'form-control' }} ) }}#}
-        {#</div>#}
-
-        {#<div class="form-group">#}
-            {#<label>#}
-                {#{{ form_label(form.description, null, { 'label_attr': {'data-placement' : 'right', 'data-toggle': 'tooltip', 'title' : 'This is the main title for your add'} } ) }}#}
-            {#</label>#}
-            {#{% if form_errors(form.description) is not empty %}<p class="text-danger">{{ form_errors(form.description) }}</p>{% endif %}#}
-            {#{{ form_widget(form.description, {'attr': {'class': 'form-control' }} ) }}#}
-        {#</div>#}
-
-        {#<div class="form-group">#}
-            {#<label>#}
-                {#{{ form_label(form.rent, null, { 'label_attr': {'data-placement' : 'right', 'data-toggle': 'tooltip', 'title' : 'This is the main title for your add'} } ) }}#}
-            {#</label>#}
-            {#{% if form_errors(form.rent) is not empty %}<p class="text-danger">{{ form_errors(form.rent) }}</p>{% endif %}#}
-            {#{{ form_widget(form.rent, {'attr': {'class': 'form-control' }} ) }}#}
-        {#</div>#}
-
-        {#<button type="submit">Save</button>#}
-        {#{{ form_rest(form) }}#}
-    {#</form>#}
 {% endblock %}
