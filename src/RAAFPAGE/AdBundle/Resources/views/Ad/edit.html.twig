@@ -1,13 +1,11 @@
 {% extends 'RAAFPAGEAdBundle::layout.html.twig' %}
 
 {% block page_content %}
-    <form id="property_form" action="{{ path('upload_add') }}" class="form-upload-add" novalidate
+    <form id="property_form" action="{{ path('edit_add', {'id': property.id}) }}" class="form-upload-add" novalidate
     method="post" {{ form_enctype(form) }}">
 
         <p class="form-group">
-            <label>
-                {{ form_label(form.title, null, {'label_attr': {'title': 'Ad title'}}) }}
-            </label>
+            {{ form_label(form.title, null, {'label_attr': {'title': 'Ad title'}}) }}
             <error>{{ form_errors(form.title) }}</error>
             {{ form_widget(form.title) }}
         </p>
@@ -103,8 +101,78 @@
         {{ form_widget(form.property_type) }}
     </p>
 
+    <p class="form-group">
+
+    {% for type in types %}
+        {% set checked = '' %}
+        {% for t in property.adTypes %}
+            {% if t.id == type.id %}
+                {% set checked = 'checked == "checked"' %}
+            {% endif %}
+        {% endfor %}
+        <label>{{ type.name }}</label>
+        <input type="checkbox" name="add_type[]" value="{{ type.id }}" {{ checked }}>
+
+    {% endfor %}
+    </p>
+
+
+    {#<p class="form-group">#}
+        {#<label>#}
+            {#{{ form_label(form.adTypes) }}#}
+        {#</label>#}
+        {#<error>{{ form_errors(form.adTypes) }}</error>#}
+        {#{{ form_widget(form.adTypes) }}#}
+    {#</p>#}
+
+    {#<div>#}
+        {#<ul>#}
+            {#{% for r in form.adTypes %}#}
+                {#<li>#}
+                    {#{{ form_widget(form.adType) }}#}
+                    {#&#123;&#35;{{ form_label(form.adTypes) }}&#35;&#125;#}
+                {#</li>#}
+            {#{% endfor %}#}
+        {#</ul>#}
+    {#</div>#}
+
         <button type="submit">Save</button>
         {{ form_rest(form) }}
     </form>
 
+
+    {#<form id="property_form" action="{{ path('upload_add') }}" class="form-upload-add" novalidate#}
+          {#method="post" {{ form_enctype(form) }}">#}
+
+        {#<div class="new-recipe-alert alert alert-danger hide">#}
+            {#Please fill all mandatory fields#}
+        {#</div>#}
+
+        {#<div class="form-group">#}
+            {#<label>#}
+                {#{{ form_label(form.title, null, { 'label_attr': {'data-placement' : 'right', 'data-toggle': 'tooltip', 'title' : 'This is the main title for your add'} } ) }}#}
+            {#</label>#}
+            {#{% if form_errors(form.title) is not empty %}<p class="text-danger">{{ form_errors(form.title) }}</p>{% endif %}#}
+            {#{{ form_widget(form.title, {'attr': {'class': 'form-control' }} ) }}#}
+        {#</div>#}
+
+        {#<div class="form-group">#}
+            {#<label>#}
+                {#{{ form_label(form.description, null, { 'label_attr': {'data-placement' : 'right', 'data-toggle': 'tooltip', 'title' : 'This is the main title for your add'} } ) }}#}
+            {#</label>#}
+            {#{% if form_errors(form.description) is not empty %}<p class="text-danger">{{ form_errors(form.description) }}</p>{% endif %}#}
+            {#{{ form_widget(form.description, {'attr': {'class': 'form-control' }} ) }}#}
+        {#</div>#}
+
+        {#<div class="form-group">#}
+            {#<label>#}
+                {#{{ form_label(form.rent, null, { 'label_attr': {'data-placement' : 'right', 'data-toggle': 'tooltip', 'title' : 'This is the main title for your add'} } ) }}#}
+            {#</label>#}
+            {#{% if form_errors(form.rent) is not empty %}<p class="text-danger">{{ form_errors(form.rent) }}</p>{% endif %}#}
+            {#{{ form_widget(form.rent, {'attr': {'class': 'form-control' }} ) }}#}
+        {#</div>#}
+
+        {#<button type="submit">Save</button>#}
+        {#{{ form_rest(form) }}#}
+    {#</form>#}
 {% endblock %}

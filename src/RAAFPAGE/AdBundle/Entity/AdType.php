@@ -20,6 +20,27 @@ class AdType
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    protected $name;
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * @ORM\ManyToMany(targetEntity="Property", mappedBy="AdTypes")
      **/
     private $properties;

@@ -57,7 +57,7 @@ class Property
      *
      * @ORM\Column(name="is_agent", type="boolean", nullable=false)
      */
-    private $agent = false;
+    private $isAgent = false;
 
     /**
      * @var int
@@ -98,9 +98,9 @@ class Property
     private $propertyType;
 
     /**
-     * @ORM\OneToMany(targetEntity="\RAAFPAGE\AdBundle\Entity\AdLink", mappedBy="property")
+     * @ORM\Column(name="link", type="string", length=255)
      **/
-    private $links;
+    private $link;
 
     /**
      * @var enum
@@ -111,7 +111,6 @@ class Property
     public function __construct() {
         $this->adTypes = new ArrayCollection();
         $this->images = new ArrayCollection();
-        $this->links = new ArrayCollection();
     }
 
     /**
@@ -143,30 +142,22 @@ class Property
 
 
     /**
-     * @param Link $link
+     * @param string $link
      * @return Property
      */
-    public function addLink(Link $link)
+    public function setLink($link)
     {
-        $this->links[] = $link;
+        $this->link = $link;
 
         return $this;
     }
 
     /**
-     * @param AdLink $link
+     * @return string
      */
-    public function removeLink(AdLink $link)
+    public function getLink()
     {
-        $this->links->removeElement($link);
-    }
-
-    /**
-     * @return ArrayCollection|Link[]
-     */
-    public function getLinks()
-    {
-        return $this->links;
+        return $this->link;
     }
 
     /**
@@ -201,17 +192,17 @@ class Property
     /**
      * @return mixed
      */
-    public function getAgent()
+    public function getIsAgent()
     {
-        return $this->agent;
+        return $this->isAgent;
     }
 
     /**
      * @param mixed $agent
      */
-    public function setAgent($agent)
+    public function setIsAgent($agent)
     {
-        $this->agent = $agent;
+        $this->isAgent = $agent;
     }
 
     /**

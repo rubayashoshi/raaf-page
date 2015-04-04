@@ -1,7 +1,12 @@
 {% extends '::base.html.twig' %}
 
 {% block title %}RAAFPAGE - SELLER ADMIN{% endblock %}
-
+{% block layout_css %}
+    {% stylesheets output="bundles/adBundle/css/ad.css"
+        '@RAAFPAGEAdBundle/Resources/public/css/upload-form.css' %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
 {% block content %}
     {% block page_content %}{% endblock %}
 {% endblock %}

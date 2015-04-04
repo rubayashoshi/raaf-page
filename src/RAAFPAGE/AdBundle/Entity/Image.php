@@ -19,6 +19,16 @@ class Image
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    protected $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    protected $address;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Property", inversedBy="images")
      * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
      **/
