@@ -1,0 +1,118 @@
+{% extends 'RAAFPAGEAdBundle::layout.html.twig' %}
+
+{% block javascripts %}
+{% javascripts '@RAAFPAGEAdBundle/Resources/public/js/fileUploader/*' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock %}
+{% block page_content %}
+
+    <form action="{{ path('upload_image') }}" method="post" enctype="multipart/form-data" id="MyUploadForm">
+        <input name="image_file" id="imageInput" type="file" />
+        <input type="submit"  id="submit-btn" value="Upload" />
+        <img src="images/ajax-loader.gif" id="loading-img" style="display:none;" alt="Please Wait"/>
+    </form>
+    <div id="output"></div>
+
+    <form id="property_form" action="{{ path('edit_add', {'id': property.id}) }}" class="form-upload-add" novalidate
+    method="post" {{ form_enctype(form) }}">
+
+    <div class="block-container">
+        {% if error != '' %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        <p class="form-group">
+            {{ form_label(form.title, null, {'label_attr': {'title': 'Ad title', 'class':'label'}}) }}
+            {{ form_widget(form.title) }}
+        </p>
+
+        <p class="form-group">
+            {{ form_label(form.description, null, {'label_attr': {'title': 'Description'}}) }}
+            {{ form_widget(form.description, {'attr': {'class': 'textarea' }}) }}
+        </p>
+    </div>
+
+    <div class="block-container">
+        Images:
+    </div>
+
+    <div class="block-container">
+        <p class="form-group">
+            {{ form_label(form.rent, null, {'label_attr': {'title': 'Rent'}}) }}
+            <error>{{ form_errors(form.rent) }}</error>
+            {{ form_widget(form.rent) }}
+        </p>
+
+        <p class="form-group">
+            {{ form_label(form.date_available, null, {'label_attr': {'title': 'Rent'}}) }}
+            <error>{{ form_errors(form.date_available) }}</error>
+            {{ form_widget(form.date_available) }}
+        </p>
+    </div>
+
+    <div class="block-container">
+        <p class="form-group">
+            {{ form_label(form.available_to_couple, null, {'label_attr': {'title': 'Rent'}}) }}
+            <error>{{ form_errors(form.available_to_couple) }}</error>
+            {{ form_widget(form.available_to_couple) }}
+        </p>
+
+        <p class="form-group">
+            {{ form_label(form.is_agent) }}
+            <error>{{ form_errors(form.is_agent) }}</error>
+            {{ form_widget(form.is_agent) }}
+        </p>
+    <p class="form-group">
+        {{ form_label(form.rent_period) }}
+        <error>{{ form_errors(form.rent_period) }}</error>
+        {{ form_widget(form.rent_period) }}
+    </p>
+    <p class="form-group">
+        {{ form_label(form.link) }}
+        <error>{{ form_errors(form.link) }}</error>
+        {{ form_widget(form.link) }}
+    </p>
+    <p class="form-group">
+        {{ form_label(form.property_type) }}
+        <error>{{ form_errors(form.property_type) }}</error>
+        {{ form_widget(form.property_type) }}
+    </p>
+    </div>
+
+    <div class="block-container">
+        Please select at least one following option to be contacted by:<br>
+        <p class="form-group">
+            {{ form_widget(form.contact_email) }} Contact Email {{ form_widget(form.contact_email_address) }}
+        </p>
+
+        <p class="form-group">
+            {{ form_widget(form.contact_phone) }} Contact Number {{ form_widget(form.contact_phone_number) }}
+        </p>
+
+        <p class="form-group">
+            Contact Name:   {{ form_widget(form.contact_name) }}
+        </p>
+
+        <p class="form-group">
+
+            {% for type in types %}
+                {% set checked = '' %}
+                {% for t in property.adTypes %}
+                    {% if t.id == type.id %}
+                        {% set checked = 'checked == "checked"' %}
+                    {% endif %}
+                {% endfor %}
+                <label>{{ type.name }}</label>
+                <input type="checkbox" name="add_type[]" value="{{ type.id }}" {{ checked }}>
+
+            {% endfor %}
+        </p>
+    </div>
+
+    <div class="block-container">
+        <button type="submit">Save</button>
+        {{ form_rest(form) }}
+    </div>
+    </form>
+
+{% endblock %}
