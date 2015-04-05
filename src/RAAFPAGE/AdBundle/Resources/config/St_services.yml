@@ -1,0 +1,9 @@
+services:
+    foodity.client_bundle.recipe_index_search_manager:
+        class: %foodity.client_bundle.recipe_index_search_manager.class%
+        arguments:
+             - @service_container
+             - @foodity.client_bundle.java_api.recipe_search
+             - @foodity.product_bundle.fetcher.organisation_visible_brands
+        calls:
+          - [setSessionName, ["nutrition_recipe_index_search_query"] ]

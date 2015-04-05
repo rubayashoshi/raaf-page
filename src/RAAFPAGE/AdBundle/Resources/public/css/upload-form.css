@@ -44,3 +44,7 @@ input:focus, textarea:focus {
 .error {
     border-color:red;
 }
+
+form input[type="file"] {
+    display: none;
+}
