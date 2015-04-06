@@ -8,16 +8,25 @@
 {% block page_content %}
 
     <form action="{{ path('upload_image') }}" method="post" enctype="multipart/form-data" id="MyUploadForm">
-        <div id="output">
-            <img src="{{ asset('images/noimage.png') }}" id="no-image"/>
+        <div class="output">
+            <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
+            <input name="image_file" class="image_file" id="imageInput" type="file" />
+            <div class="image_no" id="image1"></div>
+            <input type="submit"  id="submit-btn" value="Upload" style="display: none;" />
+            <img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>
+        </div>
+
+        <div class="output">
+            <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
             <input name="image_file" class="image_file" id="imageInput" type="file" />
             <input type="submit"  id="submit-btn" value="Upload" style="display: none;" />
             <img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>
         </div>
     </form>
 
-    <form id="property_form" action="{{ path('edit_add', {'id': property.id}) }}" class="form-upload-add" novalidate
-    method="post" {{ form_enctype(form) }}">
+    <form action="{{ path('edit_add', {'id': property.id}) }}" class="form-upload-add" novalidate
+    method="post" enctype="multipart/form-data" id="MyUploadForm">
+
 
     <div class="block-container">
         {% if error != '' %}
@@ -36,6 +45,13 @@
 
     <div class="block-container">
         Images:
+        {#<div id="output">#}
+            {#<img src="{{ asset('images/noimage.png') }}" id="no-image"/>#}
+            {#<input name="image_file" class="image_file" id="imageInput" type="file" />#}
+            {#<input type="submit"  id="submit-btn" value="Upload" style="display: none;" />#}
+            {#<img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>#}
+        {#</div>#}
+
     </div>
 
     <div class="block-container">

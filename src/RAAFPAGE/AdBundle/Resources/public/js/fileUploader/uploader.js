@@ -1,12 +1,15 @@
 $(document).ready(function() {
     var options = {
-        target: '#output',   // target element(s) to be updated with server response
+        //url: 'comment.php',
+        target: '.current_output',   // target element(s) to be updated with server response
         beforeSubmit: beforeSubmit,  // pre-submit callback
         success: afterSuccess,  // post-submit callback
         resetForm: true        // reset the form after successful submit
     };
-    $("#no-image").click(function () {
-        $("#imageInput").trigger('click');
+    $(".no-image").click(function () {
+        $(this).parent().parent().find('.current_output').removeClass('current_output');
+        $(this).parent().addClass('current_output');
+        $(this).siblings("#imageInput").trigger('click');
     });
 
     $( ".image_file" ).change(function() {

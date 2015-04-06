@@ -29,8 +29,8 @@ class AdController extends Controller
         /** @var FileUploader $fileUploader*/
         $fileUploader = $this->get('raafpage.adbundle.file_uploader');
         ############ Configuration ##############
-                $thumb_square_size 		= 50; //Thumbnails will be cropped to 200x200 pixels
-                $max_image_size 		= 50; //Maximum image size (height and width)
+                $thumb_square_size 		= 100; //Thumbnails will be cropped to 200x200 pixels
+                $max_image_size 		= 100; //Maximum image size (height and width)
                 $thumb_prefix			= "thumb_"; //Normal thumb Prefix
                 $destination_folder		= '/home/foodity/www/raaf-page/web/uploads/property/'; //upload directory ends with / (slash)
                 $jpeg_quality 			= 90; //jpeg quality
@@ -112,6 +112,11 @@ class AdController extends Controller
      */
     public function uploadAction($id = null)
     {
+//        $request = $this->getRequest();
+//        //upload image using ajax
+//        if ($request->isXmlHttpRequest()) {
+//            $this->ajaxUpload();
+//        }
         if ($id) {
             $property = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Property')
                 ->find($id);
