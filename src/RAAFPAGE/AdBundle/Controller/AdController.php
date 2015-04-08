@@ -5,9 +5,11 @@ namespace RAAFPAGE\AdBundle\Controller;
 use RAAFPAGE\AdBundle\Entity\Property;
 use RAAFPAGE\AdBundle\Form\Type\PropertyType;
 use RAAFPAGE\AdBundle\Service\FileUploader;
+use RAAFPAGE\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AdController extends Controller
 {
@@ -21,19 +23,32 @@ class AdController extends Controller
     }
 
     /**
+     * @Route("seller/add/delete-image/{imageId}")
+    */
+    public function removeAction($imageId = null)
+    {
+        $fileUploader = $this->get('raafpage.adbundle.file_uploader');
+        $fileUploader->removeImage($imageId);
+
+        return new JsonResponse(array('status' => 'OK'));
+    }
+
+    /**
      * @Route("/seller/add/ajax-upload", name="upload_image")
      * @Template()
      */
     public function ajaxUploadAction()
     {
+        /** @var User $user */
+        $user = $this->get('security.context')->getToken()->getUser();
         /** @var FileUploader $fileUploader*/
         $fileUploader = $this->get('raafpage.adbundle.file_uploader');
         ############ Configuration ##############
-                $thumb_square_size 		= 100; //Thumbnails will be cropped to 200x200 pixels
-                $max_image_size 		= 100; //Maximum image size (height and width)
-                $thumb_prefix			= "thumb_"; //Normal thumb Prefix
-                $destination_folder		= '/home/foodity/www/raaf-page/web/uploads/property/'; //upload directory ends with / (slash)
-                $jpeg_quality 			= 90; //jpeg quality
+                $thumb_square_size 		= 100;
+                $max_image_size 		= 100;
+                $thumb_prefix			= "thumb_";
+                $destination_folder		= '/home/foodity/www/raaf-page/web/uploads/temp/';
+                $jpeg_quality 			= 90;
         ##########################################
 
         //continue only if $_POST is set and it is a Ajax request
@@ -79,11 +94,12 @@ class AdController extends Controller
                 $image_name_only = strtolower($image_info["filename"]);//file name only, no extension
 
                 //create a random name for new image (Eg: fileName_293749.jpg) ;
-                $new_file_name = $image_name_only. '_' .  rand(0, 9999999999) . '.' . $image_extension;
+                //$new_file_name = $image_name_only. '_' .  rand(0, 9999999999) . '.' . $image_extension;
+                $new_file_name = $_POST['image_id'] . '.' . $image_extension;
 
                 //folder path to save resized images and thumbnails
                 $thumb_save_folder 	= $destination_folder . $thumb_prefix . $new_file_name;
-                $image_save_folder 	= $destination_folder . $new_file_name;
+                $image_save_folder 	= $destination_folder. $new_file_name;
 
                 //call normal_resize_image() function to proportionally resize image
                 if($fileUploader->normalResizeImage($image_res, $image_save_folder, $image_type, $max_image_size, $image_width, $image_height, $jpeg_quality))
@@ -93,9 +109,8 @@ class AdController extends Controller
                     {
                         die('Error Creating thumbnail');
                     }
-
                     //$imagesDir = $this->get('kernel')->getRootDir() . '/../web/images';
-                    $filePathTemp ='uploads/property/'.$thumb_prefix . $new_file_name;
+                    $filePathTemp ='uploads/temp/'.$thumb_prefix . $new_file_name;
                 }
 
                 //freeup memory
@@ -112,11 +127,6 @@ class AdController extends Controller
      */
     public function uploadAction($id = null)
     {
-//        $request = $this->getRequest();
-//        //upload image using ajax
-//        if ($request->isXmlHttpRequest()) {
-//            $this->ajaxUpload();
-//        }
         if ($id) {
             $property = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Property')
                 ->find($id);
@@ -157,10 +167,13 @@ class AdController extends Controller
      */
     public function editAction($id=null)
     {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $temporaryAdId = time().$user->getId();
         if ($id) {
             $property = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Property')
                 ->find($id);
         } else {
+
             $property = new Property();
         }
 
@@ -183,7 +196,8 @@ class AdController extends Controller
                         ->find($type);
                     $property->addAdType($adType);
                 }
-
+                $fileUploader = $this->get('raafpage.adbundle.file_uploader');
+                $fileUploader->moveImageTo($user->getId());
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($property);
                 $manager->flush();
@@ -193,6 +207,6 @@ class AdController extends Controller
             }
         }
 
-        return array('form' => $form->createView(), 'property' => $property, 'types' => $types, 'error' => $error);
+        return array('form' => $form->createView(), 'temporaryAdId' => $temporaryAdId,'property' => $property, 'types' => $types, 'error' => $error);
     }
 }

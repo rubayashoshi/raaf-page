@@ -89,4 +89,20 @@ class FileUploader
             default: return false;
         }
     }
+
+    public function moveImageTo($userId)
+    {
+        foreach (glob("/home/foodity/www/raaf-page/web/uploads/temp/{$userId}_*") as $filename) {
+            copy($filename, str_replace('temp','property',$filename));
+            unlink($filename);
+        }
+    }
+
+    public function removeImage($imageId)
+    {
+        foreach (glob("/home/foodity/www/raaf-page/web/uploads/temp/*{$imageId}*") as $filename) {
+            unlink($filename);
+        }
+    }
+
 }

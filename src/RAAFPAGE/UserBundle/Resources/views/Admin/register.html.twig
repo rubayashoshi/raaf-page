@@ -3,6 +3,9 @@
 {% block title %}RAAF PAGE{% endblock %}
 {% block content %}
     <form id='register' action='' method='post' accept-charset='UTF-8'>
+
+        <input type="file" name="pic" accept="image/*">
+        <input type="submit" name="upload" value="Upload">
         {{ form_errors(form) }}
         {{ form_row( form.email, { 'label': 'E-Mail:' } ) }}
 

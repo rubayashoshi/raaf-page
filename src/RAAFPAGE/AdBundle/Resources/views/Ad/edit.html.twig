@@ -1,33 +1,14 @@
 {% extends 'RAAFPAGEAdBundle::layout.html.twig' %}
 
 {% block javascripts %}
-{% javascripts '@RAAFPAGEAdBundle/Resources/public/js/fileUploader/*' %}
+{% javascripts '@RAAFPAGEAdBundle/Resources/public/js/fileUploader/*' output='js/compiled/main.js' %}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}
 {% block page_content %}
 
-    <form action="{{ path('upload_image') }}" method="post" enctype="multipart/form-data" id="MyUploadForm">
-        <div class="output">
-            <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
-            <input name="image_file" class="image_file" id="imageInput" type="file" />
-            <div class="image_no" id="image1"></div>
-            <input type="submit"  id="submit-btn" value="Upload" style="display: none;" />
-            <img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>
-        </div>
-
-        <div class="output">
-            <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
-            <input name="image_file" class="image_file" id="imageInput" type="file" />
-            <input type="submit"  id="submit-btn" value="Upload" style="display: none;" />
-            <img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>
-        </div>
-    </form>
-
     <form action="{{ path('edit_add', {'id': property.id}) }}" class="form-upload-add" novalidate
     method="post" enctype="multipart/form-data" id="MyUploadForm">
-
-
     <div class="block-container">
         {% if error != '' %}
             <div class="error">{{ error }}</div>
@@ -41,20 +22,44 @@
             {{ form_label(form.description, null, {'label_attr': {'title': 'Description'}}) }}
             {{ form_widget(form.description, {'attr': {'class': 'textarea' }}) }}
         </p>
-    </div>
-
-    <div class="block-container">
-        Images:
-        {#<div id="output">#}
-            {#<img src="{{ asset('images/noimage.png') }}" id="no-image"/>#}
-            {#<input name="image_file" class="image_file" id="imageInput" type="file" />#}
-            {#<input type="submit"  id="submit-btn" value="Upload" style="display: none;" />#}
-            {#<img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>#}
-        {#</div>#}
 
     </div>
 
     <div class="block-container">
+        <!-- spinner loading image -->
+        <img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>
+        <div class="img-wrap">
+            <div class="output" data-image-id="{{ temporaryAdId }}_1">
+                <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
+                <input name="image_file" class="image_file" id="imageInput" type="file" />
+            </div>
+        </div>
+        <div class="img-wrap">
+            <div class="output" data-image-id="{{ temporaryAdId }}_2">
+                <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
+                <input name="image_file" class="image_file" id="imageInput" type="file" />
+            </div>
+        </div>
+        <div class="img-wrap">
+            <div class="output" data-image-id="{{ temporaryAdId }}_3">
+                <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
+                <input name="image_file" class="image_file" id="imageInput" type="file" />
+            </div>
+        </div>
+        <div class="img-wrap">
+            <div class="output" data-image-id="{{ temporaryAdId }}_4">
+                <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
+                <input name="image_file" class="image_file" id="imageInput" type="file" />
+            </div>
+        </div>
+        <!-- extra row to be used for remove image -->
+            <div id="no_image_hidden">
+                <div class="output" data-image-id="{{ temporaryAdId }}_2" style="display: none;">
+                    <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
+                    <input name="image_file" class="image_file" id="imageInput" type="file" />
+                </div>
+            </div>
+        <div class="block-container">
         <p class="form-group">
             {{ form_label(form.rent, null, {'label_attr': {'title': 'Rent'}}) }}
             <error>{{ form_errors(form.rent) }}</error>
@@ -112,7 +117,6 @@
         </p>
 
         <p class="form-group">
-
             {% for type in types %}
                 {% set checked = '' %}
                 {% for t in property.adTypes %}
@@ -122,13 +126,13 @@
                 {% endfor %}
                 <label>{{ type.name }}</label>
                 <input type="checkbox" name="add_type[]" value="{{ type.id }}" {{ checked }}>
-
             {% endfor %}
         </p>
     </div>
-
+    <input type="temporaryAdId" value="{{ temporaryAdId }}" type="hidden">
     <div class="block-container">
-        <button type="submit">Save</button>
+
+        <input type="submit" name="Save" value="Save" id="save">
         {{ form_rest(form) }}
     </div>
     </form>

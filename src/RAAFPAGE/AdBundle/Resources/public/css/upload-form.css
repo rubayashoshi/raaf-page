@@ -48,3 +48,45 @@ input:focus, textarea:focus {
 form input[type="file"] {
     display: none;
 }
+
+.overlay_image{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background: red;
+}
+
+.image-container {
+    width: 85px;
+    height: 80px;
+    float: left;
+    border: 1px solid darkgray;
+}
+
+.img-wrap {
+    position: relative;
+    display: inline-block;
+    border: 1px red solid;
+    font-size: 0;
+}
+.img-wrap .close {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 100;
+    background-color: #FFF;
+    padding: 5px 2px 2px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: .4;
+    text-align: center;
+    font-size: 30px;
+    line-height: 15px;
+    border-radius: 50%;
+}
+.img-wrap:hover .close {
+    opacity: 1;
+}
