@@ -27,6 +27,7 @@ class AdController extends Controller
     */
     public function removeAction($imageId = null)
     {
+        /** @var FileUploader $fileUploader */
         $fileUploader = $this->get('raafpage.adbundle.file_uploader');
         $fileUploader->removeImage($imageId);
 
@@ -118,7 +119,7 @@ class AdController extends Controller
             }
         }
 
-        return array('path' => $filePathTemp);
+        return array('path' => $filePathTemp.'?id='.time());
     }
 
     /**

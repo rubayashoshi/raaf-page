@@ -35,6 +35,7 @@ uploadForm.prototype = {
                     url: 'http://raaf-page.local/app_dev.php/seller/add/ajax-upload',
                     data: {'image_id': _this.imageId},
                     target: '.current_output',
+                    cache: false,
                     beforeSubmit: beforeSubmit,
                     success: afterSuccess,
                     resetForm: true
