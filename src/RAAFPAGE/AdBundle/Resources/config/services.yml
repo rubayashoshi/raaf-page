@@ -1,3 +1,5 @@
 services:
     raafpage.ad_bundle.file_uploader:
         class: RAAFPAGE\AdBundle\Service\FileUploader
+        arguments:
+             - "@doctrine.orm.entity_manager"

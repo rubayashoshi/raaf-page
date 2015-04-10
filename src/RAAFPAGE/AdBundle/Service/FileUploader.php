@@ -2,7 +2,10 @@
 
 namespace RAAFPAGE\AdBundle\Service;
 
+use Doctrine\ORM\EntityManager;
 use JMS\DiExtraBundle\Annotation as DI;
+use RAAFPAGE\AdBundle\Entity\Image;
+use RAAFPAGE\AdBundle\Entity\Property;
 
 /**
  * Class FileUploader
@@ -10,6 +13,17 @@ use JMS\DiExtraBundle\Annotation as DI;
  */
 class FileUploader
 {
+    /**
+     *
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    public function __constructor(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     #####  This function will proportionally resize image #####
     public function normalResizeImage($source, $destination, $image_type, $max_size, $image_width, $image_height, $quality){
 
@@ -92,10 +106,54 @@ class FileUploader
 
     public function moveImageTo($userId)
     {
-        foreach (glob("/home/foodity/www/raaf-page/web/uploads/temp/{$userId}_*") as $filename) {
+        //todo if same image is already exists in the property, then delete it
+        foreach (glob(FileImageInfo::$tempDestinationPath.$userId."_*") as $filename) {
             copy($filename, str_replace('temp','property',$filename));
             unlink($filename);
         }
+
+        //todo if same image is already exists in the property, then delete it
+        foreach (glob(FileImageInfo::$tempDestinationPath.FileImageInfo::$thumb_prefix.$userId."_*") as $filename) {
+            copy($filename, str_replace('temp','property',$filename));
+            unlink($filename);
+        }
+    }
+
+    /**
+     * @param Property $property
+     * @param $userId
+     */
+    public function attacheImageToProperty(Property $property, $userId)
+    {
+        foreach (glob(FileImageInfo::$uploadDirectoryPath.$userId."_*") as $filename) {
+            $onlyFileName = $this->getFileName($filename);
+
+            if (!$property->hasImage($onlyFileName)) {
+                $image = new Image();
+                $image->setProperty($property);
+                $image->setAddress(FileImageInfo::$imageWebPath.$onlyFileName);
+                $image->setName($onlyFileName);
+                $property->addImage($image);
+            }
+        }
+
+        foreach (glob(FileImageInfo::$uploadDirectoryPath.FileImageInfo::$thumb_prefix.$userId."_*") as $filename) {
+            $onlyFileName = $this->getFileName($filename);
+
+            if (!$property->hasImage($onlyFileName)) {
+                $image = new Image();
+                $image->setProperty($property);
+                $image->setAddress(FileImageInfo::$imageWebPath.$onlyFileName);
+                $image->setName($onlyFileName);
+                $property->addImage($image);
+            }
+        }
+    }
+
+    private function getFileName($filename)
+    {
+        $parts = explode( "/", $filename );
+        return $parts[count($parts) - 1];
     }
 
     public function removeImage($imageId)

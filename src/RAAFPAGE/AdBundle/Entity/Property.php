@@ -99,7 +99,7 @@ class Property
     private $contactPhoneNumber;
 
     /**
-     * @ORM\OneToMany(targetEntity="\RAAFPAGE\AdBundle\Entity\Image", mappedBy="property")
+     * @ORM\OneToMany(targetEntity="\RAAFPAGE\AdBundle\Entity\Image", mappedBy="property",cascade={"persist", "remove" })
      **/
     private $images;
 
@@ -151,9 +151,32 @@ class Property
     }
 
     /**
+     * @param $image
+     * @return bool
+     */
+    public function hasImage($image)
+    {
+        foreach ($this->images as $imageItem) {
+            if ($image == $imageItem->getName()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @return ArrayCollection|Image[]
      */
     public function getImage()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @return ArrayCollection|Image[]
+     */
+    public function getImages()
     {
         return $this->images;
     }

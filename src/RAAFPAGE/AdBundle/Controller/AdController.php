@@ -6,6 +6,8 @@ use RAAFPAGE\AdBundle\Entity\Property;
 use RAAFPAGE\AdBundle\Form\Type\PropertyType;
 use RAAFPAGE\AdBundle\Service\FileUploader;
 use RAAFPAGE\UserBundle\Entity\User;
+use RAAFPAGE\AdBundle\Service\FileImageInfo;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -44,13 +46,6 @@ class AdController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         /** @var FileUploader $fileUploader*/
         $fileUploader = $this->get('raafpage.adbundle.file_uploader');
-        ############ Configuration ##############
-                $thumb_square_size 		= 100;
-                $max_image_size 		= 100;
-                $thumb_prefix			= "thumb_";
-                $destination_folder		= '/home/foodity/www/raaf-page/web/uploads/temp/';
-                $jpeg_quality 			= 90;
-        ##########################################
 
         //continue only if $_POST is set and it is a Ajax request
         if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
@@ -98,20 +93,35 @@ class AdController extends Controller
                 //$new_file_name = $image_name_only. '_' .  rand(0, 9999999999) . '.' . $image_extension;
                 $new_file_name = $_POST['image_id'] . '.' . $image_extension;
 
-                //folder path to save resized images and thumbnails
-                $thumb_save_folder 	= $destination_folder . $thumb_prefix . $new_file_name;
-                $image_save_folder 	= $destination_folder. $new_file_name;
+                FileImageInfo::setImageName($user->getId(), $new_file_name);
+                $normalImageFolderPath = FileImageInfo::getNormalImageDestinationPath();
 
                 //call normal_resize_image() function to proportionally resize image
-                if($fileUploader->normalResizeImage($image_res, $image_save_folder, $image_type, $max_image_size, $image_width, $image_height, $jpeg_quality))
-                {
+                if(
+                $fileUploader->normalResizeImage(
+                    $image_res,
+                    $normalImageFolderPath,
+                    $image_type,
+                    FileImageInfo::$max_image_size,
+                    $image_width,
+                    $image_height,
+                    FileImageInfo::$jpeg_quality
+                    )
+                ){
                     //call crop_image_square() function to create square thumbnails
-                    if(!$fileUploader->cropImageSquare($image_res, $thumb_save_folder, $image_type, $thumb_square_size, $image_width, $image_height, $jpeg_quality))
-                    {
+                    if(!$fileUploader->cropImageSquare(
+                        $image_res,
+                        FileImageInfo::getThumbImageDestinationPath(),
+                        $image_type,
+                        FileImageInfo::$_thumb_square_size,
+                        $image_width,
+                        $image_height,
+                        FileImageInfo::$jpeg_quality)
+                    ) {
                         die('Error Creating thumbnail');
                     }
-                    //$imagesDir = $this->get('kernel')->getRootDir() . '/../web/images';
-                    $filePathTemp ='uploads/temp/'.$thumb_prefix . $new_file_name;
+
+                    $filePathTemp = FileImageInfo::getImageFullName($user->getId(), $new_file_name);
                 }
 
                 //freeup memory
@@ -120,46 +130,6 @@ class AdController extends Controller
         }
 
         return array('path' => $filePathTemp.'?id='.time());
-    }
-
-    /**
-     * @Route("/seller/add/upload", name="upload_add")
-     * @Template()
-     */
-    public function uploadAction($id = null)
-    {
-        if ($id) {
-            $property = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Property')
-                ->find($id);
-        } else {
-            $property = new Property();
-        }
-
-        $form = $this->createForm(new PropertyType(), $property);
-        $form->handleRequest($this->getRequest());
-
-        $types = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
-            ->findAll();
-        $error = 's';
-        if ($this->getRequest()->isMethod('POST')) {
-            if ($form->isValid()) {
-                $property = $form->getData();
-                foreach ($_POST['add_type'] as $type) {
-                    $adType = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
-                        ->find($type);
-                    $property->addAdType($adType);
-                }
-
-                $manager = $this->getDoctrine()->getManager();
-                $manager->persist($property);
-                $manager->flush();
-            } else {
-                $error = 'Form has some fields incomplete or missing,' .
-                    'please check and complete all required information.';
-            }
-        }
-
-        return array('form' => $form->createView(), 'types' => $types, 'error' => $error);
     }
 
     /**
@@ -179,12 +149,13 @@ class AdController extends Controller
         }
 
         $form = $this->createForm(new PropertyType(), $property);
-        $form->handleRequest($this->getRequest());
 
         $types = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
             ->findAll();
-        $error = '';
+        $error = null;
+
         if ($this->getRequest()->isMethod('POST')) {
+            $form->handleRequest($this->getRequest());
             if ($form->isValid()) {
                 /** @var Property $property */
                 $property = $form->getData();
@@ -197,17 +168,42 @@ class AdController extends Controller
                         ->find($type);
                     $property->addAdType($adType);
                 }
-                $fileUploader = $this->get('raafpage.adbundle.file_uploader');
-                $fileUploader->moveImageTo($user->getId());
+
+                //move images from temp folder and add them into database for new ad
+                /** @var FileUploader $fileUploader */
+                if (!$property->getId()) {
+                    $fileUploader = $this->get('raafpage.adbundle.file_uploader');
+                    $fileUploader->moveImageTo($user->getId());
+                    $fileUploader->attacheImageToProperty($property, $user->getId());
+                }
+
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($property);
                 $manager->flush();
             } else {
+                var_dump($form->getErrorsAsString());die;
                 $error = 'Form has some fields incomplete or missing,' .
                     'please check and complete all required information.';
             }
         }
 
-        return array('form' => $form->createView(), 'temporaryAdId' => $temporaryAdId,'property' => $property, 'types' => $types, 'error' => $error);
+        $images = array(
+            0 => 'missing',
+            1 => 'missing',
+            2 => 'missing',
+            3 => 'missing'
+        );
+
+        $i = 0;
+
+        foreach ($property->getImages() as $image) {
+            if (stripos($image->getAddress(), 'thumb')) {
+                unset($images[$i]);
+                $images[$i] =  $image->getAddress();
+                $i++;
+            }
+        }
+
+        return array('form' => $form->createView(),'images' => $images, 'temporaryAdId' => $temporaryAdId,'property' => $property, 'types' => $types, 'error' => $error);
     }
 }

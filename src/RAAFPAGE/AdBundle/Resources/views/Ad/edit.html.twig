@@ -28,37 +28,20 @@
     <div class="block-container">
         <!-- spinner loading image -->
         <img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>
-        <div class="img-wrap">
-            <div class="output" data-image-id="{{ temporaryAdId }}_1">
-                <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
-                <input name="image_file" class="image_file" id="imageInput" type="file" />
+        {% for key, value in  images%}
+            <div class="img-wrap">
+                <div class="output" data-image-id="{{ temporaryAdId }}_{{ key + 1 }}">
+                    {% if value == 'missing' %}
+                        <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
+                        <input name="image_file" class="image_file" id="imageInput" type="file" />
+                    {% else %}
+                        <img src="{{ asset(value) }}">
+                        <span class="close">&times;</span>
+                    {% endif %}
+                    </div>
             </div>
-        </div>
-        <div class="img-wrap">
-            <div class="output" data-image-id="{{ temporaryAdId }}_2">
-                <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
-                <input name="image_file" class="image_file" id="imageInput" type="file" />
-            </div>
-        </div>
-        <div class="img-wrap">
-            <div class="output" data-image-id="{{ temporaryAdId }}_3">
-                <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
-                <input name="image_file" class="image_file" id="imageInput" type="file" />
-            </div>
-        </div>
-        <div class="img-wrap">
-            <div class="output" data-image-id="{{ temporaryAdId }}_4">
-                <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
-                <input name="image_file" class="image_file" id="imageInput" type="file" />
-            </div>
-        </div>
-        <!-- extra row to be used for remove image -->
-            <div id="no_image_hidden">
-                <div class="output" data-image-id="{{ temporaryAdId }}_2" style="display: none;">
-                    <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
-                    <input name="image_file" class="image_file" id="imageInput" type="file" />
-                </div>
-            </div>
+        {% endfor %}
+
         <div class="block-container">
         <p class="form-group">
             {{ form_label(form.rent, null, {'label_attr': {'title': 'Rent'}}) }}
