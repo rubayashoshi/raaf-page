@@ -1,0 +1,85 @@
+{% extends '::base.html.twig' %}
+
+{% block javascripts %}
+    {% javascripts  output='js/compiled/site.js'
+    '@RAAFPAGEAdBundle/Resources/public/js/fileUploader/*'
+    '@RAAFPAGEUserBundle/Resources/public/js/*'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block layout_css %}
+    {% stylesheets output="bundles/UserBundle/css/screen.css"
+        '@RAAFPAGESiteBundle/Resources/public/css/site-home-page.css'
+    %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block menu_css %}
+    {% stylesheets output="bundles/UserBundle/css/menu.css"
+        '@RAAFPAGEUserBundle/Resources/public/css/menu.css'
+    %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block navigation %}
+    <div id='cssmenu'>
+        <ul>
+            <li><a href='#'>PROPERTY</a>
+                <ul>
+                    <li>
+                        <a href='#'>SALE</a>
+                        <ul>
+                            <li>
+                                <a href='#'>OFFERED</a>
+                                <li><a href='#'>1 BED ROOM </a></li>
+                                <li><a href='#'>2 BED ROOM </a></li>
+                                <li><a href='#'>3 BED ROOM </a></li>
+                                <li><a href='#'>4 BED ROOM </a></li>
+                                <li><a href='#'>5 BED ROOM </a></li>
+                                <li><a href='#'>6 BED ROOM </a></li>
+                                <li><a href='#'>7 BED ROOM </a></li>
+                                <li><a href='#'>SHORT TERMS</a></li>
+                                <li><a href='#'>STUDIO AND BEDSIDE</a></li>
+                            </li>
+                            <li><a href='#'>WANTED</a></li>
+                            <li><a href='#'>HOLIDAY RENTALS</a></li>
+                            <li><a href='#'>HOME SWAP</a></li>
+                            <li><a href='#'>OFFICE SPACE</a></li>
+                            <li><a href='#'>PARKING SPACE, STORAGE</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href='#'>RENT</a>
+                        <ul>
+                            <li><a href='#'>WANTED</a></li>
+                            <li><a href='#'>OFFERED</a></li>
+                        </ul>
+                    </li>
+                    <li><a href='#'>SHARE</a></li>
+                    <li><a href='#'>HOME SWAP</a></li>
+                </ul>
+            </li>
+            <li class='active'><a href='#'>VEHICLE</a>
+                <ul>
+                    <li><a href='#'>CAR</a></li>
+                    <li><a href='#'>Motor bikes and scooter</a></li>
+                    <li><a href='#'>Car parts and accessories</a></li>
+                    <li><a href='#'>Car and Vans</a></li>
+                    <li><a href='#'>Truck and plant</a></li>
+                    <li><a href='#'>Wanted</a></li>
+                </ul>
+            </li>
+            <li><a href='#'>ELECTRONIC</a></li>
+            <li><a href='#'>JOBS</a></li>
+            <li><a href='#'>SERVICE</a></li>
+            <li><a href='#'>HOME AND GARDEN</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block content %}
+    {% block page_content %}{% endblock %}
+{% endblock %}

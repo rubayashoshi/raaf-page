@@ -1,0 +1,30 @@
+.site-home-page {
+    background-color: #eaeaea;
+    min-height: 450px;
+}
+.home-page-image {
+    float: left;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: top;
+    -webkit-border-radius: 5px 0px 0px 5px;
+    border-radius: 5px 0px 0px 5px;
+    border: 1px #CCC solid;
+    border-right: 0px;
+}
+.home-page-right{
+    float: right;
+    width: 300px;
+    min-height: 450px;
+    border: 1px solid darkgray;
+}
+
+.registration {
+    background-color: #eaeaea;
+    min-height: 450px;
+    padding: 20px 0;
+}
+
+#registration-form-container {
+    margin: 0 auto;
+}

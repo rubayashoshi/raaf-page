@@ -1,0 +1,14 @@
+{% extends 'RAAFPAGEUserBundle::layout.html.twig' %}
+
+{% block navigation %}
+    <div id='cssmenu'>
+        <ul>
+            <li><a href='#'>ACCOUNT DETAILS</a></li>
+            <li><a href='{{ path('') }}'>ALL ADS</a></li>
+            <li><a href='{{ path('logout') }}'>LOGOUT</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block content %}
+    {% block page_content %}{% endblock %}
+{% endblock %}
