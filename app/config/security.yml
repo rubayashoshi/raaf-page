@@ -34,7 +34,7 @@ security:
                 login_path: login
             logout:
                 path:  /admin/logout
-                target: /
+                target: seller_home_page
             #anonymous: ~
             #http_basic:
             #    realm: "Secured Demo Area"

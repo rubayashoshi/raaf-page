@@ -104,19 +104,35 @@ class FileUploader
         }
     }
 
-    public function moveImageTo($userId)
+    public function moveImageTo(Property $property, $userId)
     {
         //todo if same image is already exists in the property, then delete it
         foreach (glob(FileImageInfo::$tempDestinationPath.$userId."_*") as $filename) {
+            $this->attacheImageIntoProperty($property, $filename);
             copy($filename, str_replace('temp','property',$filename));
             unlink($filename);
         }
 
         //todo if same image is already exists in the property, then delete it
         foreach (glob(FileImageInfo::$tempDestinationPath.FileImageInfo::$thumb_prefix.$userId."_*") as $filename) {
+            $this->attacheImageIntoProperty($property, $filename);
             copy($filename, str_replace('temp','property',$filename));
             unlink($filename);
         }
+    }
+
+    /**
+     * @param $property
+     * @param $fileName
+     */
+    public function attacheImageIntoProperty($property, $fileName)
+    {
+        $onlyFileName = $this->getFileName($fileName);
+        $image = new Image();
+        $image->setProperty($property);
+        $image->setAddress(FileImageInfo::$imageWebPath.$onlyFileName);
+        $image->setName($fileName);
+        $property->addImage($image);
     }
 
     /**
@@ -159,6 +175,13 @@ class FileUploader
     public function removeImage($imageId)
     {
         foreach (glob("/home/foodity/www/raaf-page/web/uploads/temp/*{$imageId}*") as $filename) {
+            unlink($filename);
+        }
+    }
+
+    public function removeImageForExistingProperty($imageId)
+    {
+        foreach (glob("/home/foodity/www/raaf-page/web/uploads/property/*{$imageId}*") as $filename) {
             unlink($filename);
         }
     }

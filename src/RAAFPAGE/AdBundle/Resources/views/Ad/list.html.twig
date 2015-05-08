@@ -1,3 +1,7 @@
 {% extends 'RAAFPAGEAdBundle::layout.html.twig' %}
-
-{% block page_content %}Display all add for an account{% endblock %}
+{% block page_content %}
+    Display all add for an account:
+    {% for ad in ads %}
+        <a href="{{  path('edit_add',{'id': ad.id})}}">Add</a>
+    {% endfor %}
+{% endblock %}

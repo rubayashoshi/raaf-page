@@ -1,0 +1,7 @@
+parameters:
+#    raafpage_site.example.class: RAAFPAGE\SiteBundle\Example
+
+services:
+#    raafpage_site.example:
+#        class: %raafpage_site.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

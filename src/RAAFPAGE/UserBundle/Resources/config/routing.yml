@@ -1,11 +1,3 @@
-site_unsecured_page:
-    pattern: /
-    defaults: {_controller: RAAFPAGEUserBundle:Default:index }
-
-site_home_page:
-    pattern: /secured
-    defaults: {_controller: RAAFPAGEUserBundle:Default:home }
-
 admin_home_page:
     pattern: /admin
     defaults: {_controller: RAAFPAGEUserBundle:Admin:home }

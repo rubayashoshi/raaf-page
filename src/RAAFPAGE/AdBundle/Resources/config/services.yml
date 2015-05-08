@@ -3,3 +3,7 @@ services:
         class: RAAFPAGE\AdBundle\Service\FileUploader
         arguments:
              - "@doctrine.orm.entity_manager"
+    raafpage.ad_bundle.ad_manager:
+        class: RAAFPAGE\AdBundle\Service\AdManager
+        arguments:
+             - "@doctrine.orm.entity_manager"

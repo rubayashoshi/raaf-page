@@ -1,3 +1,7 @@
+raafpage_site:
+    resource: "@RAAFPAGESiteBundle/Resources/config/routing.yml"
+    prefix:   /
+
 raafpage_ad:
     resource: "@RAAFPAGEAdBundle/Controller/"
     type:     annotation
@@ -6,6 +10,7 @@ raafpage_ad:
 RAAFPAGE_user:
     resource: "@RAAFPAGEUserBundle/Resources/config/routing.yml"
     prefix:   /
+
 RAAFPAGE_user:
     resource: "@RAAFPAGEFileManagerBundle/Resources/config/routing.yml"
     prefix:   secured/document/

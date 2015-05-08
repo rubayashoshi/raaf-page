@@ -22,7 +22,8 @@ class AppKernel extends Kernel
             new RAAFPAGE\AdBundle\RAAFPAGEAdBundle(),
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new JMS\DiExtraBundle\JMSDiExtraBundle($this)
+            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new RAAFPAGE\SiteBundle\RAAFPAGESiteBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

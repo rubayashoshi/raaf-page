@@ -8,5 +8,7 @@
 /build/
 /vendor/
 /bin/
+/web/uploads/
 /composer.phar
+/web/uploads/temp
 .idea

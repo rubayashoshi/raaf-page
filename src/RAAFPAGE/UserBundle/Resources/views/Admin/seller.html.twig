@@ -1,6 +1,10 @@
-{% extends '::base.html.twig' %}
+{% extends 'RAAFPAGEUserBundle::layout.html.twig' %}
 
 {% block title %}RAAFPAGE - SELLER{% endblock %}
 {% block content %}
-    {% block user_block %}<a href="{{ path('logout') }}">Logout</a>{% endblock %}
+    <div class="registration">
+        <div id="registration-form-container">
+            Welcome back to raaf page
+        </div>
+    </div>
 {% endblock %}

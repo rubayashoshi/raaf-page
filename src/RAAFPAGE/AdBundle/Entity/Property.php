@@ -3,6 +3,7 @@
 namespace RAAFPAGE\AdBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use RAAFPAGE\UserBundle\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Annotations\Annotation\Enum;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -46,7 +47,6 @@ class Property
     /**
      * @var float $rent
      * @Assert\NotBlank()
-     * @Assert\Length(min=1)
      * @ORM\Column(name="rent", type="decimal", precision=2)
      */
     private $rent;
@@ -56,7 +56,7 @@ class Property
      *
      * @ORM\Column(name="available_to_couple", type="boolean", nullable=false)
      */
-    private $availableToCouple = false;
+    private $availableToCouple = true;
 
     /**
      * @var int
@@ -64,20 +64,6 @@ class Property
      * @ORM\Column(name="is_agent", type="boolean", nullable=false)
      */
     private $isAgent = false;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="contact_phone", type="boolean", nullable=false)
-     */
-    private $contactPhone = false;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="contact_email", type="boolean", nullable=false)
-     */
-    private $contactEmail = true;
 
     /**
      * @var string
@@ -90,7 +76,7 @@ class Property
      *
      * @ORM\Column(name="contact_email_address", type="string", length=255, nullable=false)
      */
-    private $contactEmailAddress = true;
+    private $contactEmailAddress;
 
     /**
      * @var string
@@ -116,6 +102,12 @@ class Property
     private $propertyType;
 
     /**
+     * @ORM\ManyToOne(targetEntity="\RAAFPAGE\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     **/
+    private $user;
+
+    /**
      * @ORM\Column(name="link", type="string", length=255)
      **/
     private $link;
@@ -124,11 +116,29 @@ class Property
      * @var enum
      * @ORM\Column(name="rent_period", type="string", columnDefinition="enum('monthly', 'weekly')")
      */
-    private $rentPeriod;
+    private $rentPeriod = 'weekly';
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->adTypes = new ArrayCollection();
         $this->images = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     * @return Property
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
     }
 
     /**

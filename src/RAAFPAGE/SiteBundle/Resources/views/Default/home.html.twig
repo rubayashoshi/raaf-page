@@ -1,0 +1,28 @@
+{% extends 'RAAFPAGEUserBundle::layout.html.twig' %}
+
+{% block title %}RaafPage - Welcome to Raaf page{% endblock %}
+{% block content %}
+    <div class="site-home-page">
+        <div class="home-page-image">
+            <img src="{{ asset('images/homepage.jpg') }}">
+        </div>
+        <div class="home-page-right">
+            <div class="bnr-text">
+                <div style="height: 193px;">
+                    <h2>Classifieds Ads in UK</h2>
+                    <h4>Find house or flat to rent, advertise a car for sale in UK, browse local jobs,
+                        trades, buy and sale electronics, services and stuff for sale...<br>
+                    </h4>
+                </div>
+                <div style="height: 50px">
+                    <div style="border: 1px solid #FFF; -webkit-border-radius: 4px; border-radius: 4px;">
+                        <a class="btn btn-warning btn-block" href="{{ path('add_account') }}"
+                           title="Sign-Up for Free Classifieds Account">
+                            <strong>Sign Up...</strong></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

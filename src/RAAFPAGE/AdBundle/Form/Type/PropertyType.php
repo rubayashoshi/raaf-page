@@ -33,33 +33,43 @@ class PropertyType extends AbstractType
         $builder->add('available_to_couple', 'choice', array(
             'choices'  => array('1' => 'Yes', '0' => 'No'),
             'required' => true,
+            'expanded' => true
         ));
         $builder->add('is_agent', 'choice', array(
             'choices'  => array('1' => 'Yes', '0' => 'No'),
             'required' => true,
-        ));
-        $builder->add('contact_phone', 'checkbox', array(
-            'label'    => 'Check if you want to be contacted with phone',
-            'required' => false,
-        ));
-        $builder->add('contact_email', 'checkbox', array(
-            'label'    => 'Contact ',
-            'required' => false,
+            'expanded' => true
         ));
         $builder->add('contact_phone_number', 'text', array(
-            'label'    => false,
+            'label'    => 'Contact phone number',
             'required' => false,
         ));
         $builder->add('contact_email_address', 'text', array(
-            'label'    => false,
+            'label'    => 'Contact email address',
             'required' => false,
         ));
 
-        $builder->add('contact_name');
+        $builder->add('contact_name', 'text', array(
+            'label'    => 'Contact name',
+            'required' => false,
+        ));
+
         $builder->add('rent_period', 'choice', array(
             'choices'  => array('weekly' => 'Weekly', 'monthly' => 'Monthly'),
             'required' => true,
+            'multiple' => false,
+            'expanded' => true
         ));
+//
+//        ->add('gender', 'choice', array(
+//        choices' => array(
+//          'male' => 'Male',
+//          'female' => 'Female'
+//        ),
+//        'multiple' => false,
+//        'expanded' => true,
+//        'required' => true,
+//    ))
 
         $builder->add('link', 'text');
 
@@ -67,7 +77,7 @@ class PropertyType extends AbstractType
             'label' => 'Property type',
             'class' => 'RAAFPAGEAdBundle:PropertyType',
             'property' => 'name',
-            'expanded' => false,
+            'expanded' => true,
             'multiple' => false
         ));
 

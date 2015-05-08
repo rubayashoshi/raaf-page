@@ -13,6 +13,12 @@ class FileImageInfo
     public static $uploadDirectoryPath = '/home/foodity/www/raaf-page/web/uploads/property/';
     public $image_width;
     public static $imageName = '';
+    public static $propertyId;
+
+    public static function setPropertyId($propertyId)
+    {
+        self::$propertyId = $propertyId;
+    }
 
     public static function setImageName($userId, $imageName)
     {
@@ -21,16 +27,30 @@ class FileImageInfo
 
     public static function getImageFullName()
     {
-        return self::$uploadDirectoryForTempImage.self::$thumb_prefix.self::$imageName;
+        if (self::$propertyId) {
+            return self::$imageWebPath.self::$thumb_prefix.self::$imageName;
+        } else {
+            return self::$uploadDirectoryForTempImage.self::$thumb_prefix.self::$imageName;
+        }
     }
 
     public static function getThumbImageDestinationPath()
     {
-        return self::$tempDestinationPath.self::$thumb_prefix.self::$imageName;
+        if (self::$propertyId) {
+            $destinationFolder = str_replace('temp','property',self::$tempDestinationPath);
+        } else {
+            $destinationFolder = self::$tempDestinationPath;
+        }
+
+        return $destinationFolder.self::$thumb_prefix.self::$imageName;
     }
 
     public static function getNormalImageDestinationPath()
     {
-        return self::$uploadDirectoryForTempImage.self::$imageName;
+        if (self::$propertyId) {
+            return self::$imageWebPath.self::$imageName;
+        } else {
+            return self::$uploadDirectoryForTempImage.self::$imageName;
+        }
     }
 }

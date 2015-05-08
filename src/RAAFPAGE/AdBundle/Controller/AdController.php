@@ -4,6 +4,7 @@ namespace RAAFPAGE\AdBundle\Controller;
 
 use RAAFPAGE\AdBundle\Entity\Property;
 use RAAFPAGE\AdBundle\Form\Type\PropertyType;
+use RAAFPAGE\AdBundle\Service\AdManager;
 use RAAFPAGE\AdBundle\Service\FileUploader;
 use RAAFPAGE\UserBundle\Entity\User;
 use RAAFPAGE\AdBundle\Service\FileImageInfo;
@@ -16,12 +17,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class AdController extends Controller
 {
     /**
-     * @Route("/seller/add/list")
+     * @Route("/seller/add/list", name = "ad_list")
      * @Template()
      */
     public function listAction()
     {
-        return array();
+        $user = $this->get('security.context')->getToken()->getUser();
+        /** @var AdManager $adManager */
+        $adManager = $this->get('raafpage.adbundle.ad_manager');
+        $ads = $adManager->getAllAdsByUser($user, $this->getDoctrine()->getManager());
+
+        return array('ads' => $ads);
     }
 
     /**
@@ -31,7 +37,14 @@ class AdController extends Controller
     {
         /** @var FileUploader $fileUploader */
         $fileUploader = $this->get('raafpage.adbundle.file_uploader');
-        $fileUploader->removeImage($imageId);
+        $property = $this->getRequest()->get('property_id');
+
+        //todo -- merge two into one with just folder path change
+        if ($property > 0) {
+            $fileUploader->removeImageForExistingProperty($imageId);
+        } else {
+            $fileUploader->removeImage($imageId);
+        }
 
         return new JsonResponse(array('status' => 'OK'));
     }
@@ -46,6 +59,17 @@ class AdController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         /** @var FileUploader $fileUploader*/
         $fileUploader = $this->get('raafpage.adbundle.file_uploader');
+        $propertyId = $this->getRequest()->get('property_id');
+
+        /** @var AdManager $adManager */
+        $adManager = $this->get('raafpage.adbundle.ad_manager');
+        $property = false;
+
+        if ($propertyId > 0) {
+            $property = $adManager->getPropertyById($propertyId, $this->getDoctrine()->getManager());
+            FileImageInfo::setPropertyId($propertyId);
+        }
+
 
         //continue only if $_POST is set and it is a Ajax request
         if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
@@ -95,6 +119,9 @@ class AdController extends Controller
 
                 FileImageInfo::setImageName($user->getId(), $new_file_name);
                 $normalImageFolderPath = FileImageInfo::getNormalImageDestinationPath();
+                if ($propertyId > 0) {
+                    $adManager->addImageToProperty($property, $this->getDoctrine()->getManager(), $fileUploader, $normalImageFolderPath);
+                }
 
                 //call normal_resize_image() function to proportionally resize image
                 if(
@@ -121,7 +148,12 @@ class AdController extends Controller
                         die('Error Creating thumbnail');
                     }
 
-                    $filePathTemp = FileImageInfo::getImageFullName($user->getId(), $new_file_name);
+                    //$filePathTemp = FileImageInfo::getImageFullName($user->getId(), $new_file_name);
+                    $filePathTemp = FileImageInfo::getImageFullName();
+
+                    if ($propertyId > 0) {
+                        $adManager->addImageToProperty($property, $this->getDoctrine()->getManager(), $fileUploader, $filePathTemp);
+                    }
                 }
 
                 //freeup memory
@@ -140,18 +172,18 @@ class AdController extends Controller
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $temporaryAdId = time().$user->getId();
+
         if ($id) {
             $property = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Property')
                 ->find($id);
         } else {
-
             $property = new Property();
         }
 
         $form = $this->createForm(new PropertyType(), $property);
-
         $types = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
             ->findAll();
+
         $error = null;
 
         if ($this->getRequest()->isMethod('POST')) {
@@ -173,15 +205,19 @@ class AdController extends Controller
                 /** @var FileUploader $fileUploader */
                 if (!$property->getId()) {
                     $fileUploader = $this->get('raafpage.adbundle.file_uploader');
-                    $fileUploader->moveImageTo($user->getId());
-                    $fileUploader->attacheImageToProperty($property, $user->getId());
+                    $fileUploader->moveImageTo($property, $user->getId());
+                    //$fileUploader->attacheImageToProperty($property, $user->getId());
                 }
+
+                $property->setUser($user);
 
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($property);
                 $manager->flush();
+
+                return $this->redirect($this->generateUrl('ad_list'));
             } else {
-                var_dump($form->getErrorsAsString());die;
+                //var_dump($form->getErrorsAsString());die;
                 $error = 'Form has some fields incomplete or missing,' .
                     'please check and complete all required information.';
             }

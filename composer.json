@@ -23,7 +23,9 @@
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "phpunit/phpunit": "3.7.*",
         "doctrine/doctrine-fixtures-bundle": "2.2.*",
-        "jms/security-extra-bundle": "dev-master"
+        "jms/security-extra-bundle": "dev-master",
+        "braincrafted/bootstrap-bundle": "dev-master",
+        "twitter/bootstrap": "2.3.*"
     },
     "scripts": {
         "post-install-cmd": [

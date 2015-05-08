@@ -3,25 +3,17 @@
 {% block title %}RAAFPAGE - SELLER ADMIN{% endblock %}
 {% block layout_css %}
     {% stylesheets output="bundles/adBundle/css/ad.css"
-        '@RAAFPAGEAdBundle/Resources/public/css/upload-form.css' %}
-        <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+        '@RAAFPAGEAdBundle/Resources/public/css/upload-form.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
     {% endstylesheets %}
 {% endblock %}
-{% block navigation %}
-    <ul>
-        {% if app.user %}
-            <li><a href="#">HOME</a></li>
-            <li><a href="{{path('logout')}}">LOGOUT</a></li>
-            <li><a href="#">MY DETAILS</a></li>
-            <li><a href="#">MANAGE ADS</a></li>
-        {% else %}
-            {# Menu for logged in member#}
-            <li><a href="#">HOME</a></li>
-            <li><a href="#">REGISTER</a></li>
-            <li><a href="{{ path('login') }}">MEMBER LOGIN</a></li>
-            <li><a href="#">SEARCH</a></li>
-        {% endif %}
-    </ul>
+{% block menu_css %}
+    {% stylesheets output="bundles/AdBundle/css/menu.css"
+    '@RAAFPAGEUserBundle/Resources/public/css/menu.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
 {% endblock %}
 {% block content %}
     {% block page_content %}{% endblock %}

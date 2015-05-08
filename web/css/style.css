@@ -1,0 +1,180 @@
+body {
+    background-color: #eaeaea;
+}
+#container
+{
+    margin: 0 auto;
+    width: 960px;
+}
+
+#header
+{
+    background: #ccc;
+    padding: 20px;
+}
+
+#header h1 { margin: 0; }
+
+.header-left {
+    float: left;
+    width: 50%;
+}
+.header-right {
+    float: left;
+    width: 50%;
+    text-align: right;
+}
+
+#navigation
+{
+    float: left;
+    width: 960px;
+    background: #333;
+}
+
+/*#navigation ul*/
+/*{*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+/*}*/
+
+/*#navigation ul li*/
+/*{*/
+    /*list-style-type: none;*/
+    /*display: inline;*/
+/*}*/
+
+/*#navigation li a*/
+/*{*/
+    /*display: block;*/
+    /*float: left;*/
+    /*padding: 5px 10px;*/
+    /*color: #fff;*/
+    /*text-decoration: none;*/
+    /*border-right: 1px solid #fff;*/
+/*}*/
+
+#navigation li a:hover { background: #383; }
+
+#content-container
+{
+    float: left;
+    width: 960px;
+    /*background: #fff url(/wp-content/uploads/layout-two-fixed-background.gif) repeat-y 100% 0;*/
+}
+
+.block-container {
+    background-color: #fff;
+    width: 958px;
+    float: left;
+    margin-bottom: 10px;
+    border: 1px solid #d6d6d9;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.block-container-header{
+    height: 30px;
+    float: left;
+    width: 950px;
+    /*border-bottom: 1px solid darkgray;*/
+    padding: 3px 3px 3px 10px;
+}
+
+.block-container-image-holder {
+    padding: 20px;
+}
+
+#content
+{
+    clear: left;
+    float: left;
+    width: 960px;
+    display: inline;
+}
+
+#content h2 { margin: 0; }
+
+#aside
+{
+    float: right;
+    width: 240px;
+    padding: 20px 0;
+    margin: 0 20px 0 0;
+    display: inline;
+}
+
+#aside h3 { margin: 0; }
+
+#footer
+{
+    text-decoration: no-underline !important;
+    clear: both;
+    background: #ccc;
+    padding: 20px;
+    height: 1%;
+    text-align: left;
+}
+#footer a{
+    text-decoration: no-underline !important;
+}
+
+#copy-right {
+    margin-top:5px;
+    padding: 5px;
+    height: 20px;
+}
+
+form #user div {
+    width: 300px !important;
+    padding: 5px 10px;
+}
+
+.pwdwidgetdiv
+{
+    width:225px;
+}
+
+.pwdfield
+{
+    display:block;
+}
+
+.pwdopsdiv
+{
+    display: block;
+    float: left;
+    margin-right:6px;
+}
+.pwdopsdiv a
+{
+    font-family : Arial, Helvetica, sans-serif;
+    font-size : 10px;
+}
+
+.pwdstrengthbar
+{
+    float:right;
+    background:#cccccc;
+    height:4px;
+    margin:0;
+}
+
+.pwdstrength
+{
+    float:right;
+    height:20px;
+    width:70px;
+    margin-top:3px;
+
+}
+.pwdstrengthstr
+{
+    float:right;
+    clear:both;
+    height:14px;
+    margin-top:0px;
+    font-family : Arial, Helvetica, sans-serif;
+    font-size : 10px;
+
+}

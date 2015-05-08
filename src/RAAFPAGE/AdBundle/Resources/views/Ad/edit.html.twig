@@ -1,102 +1,132 @@
-{% extends 'RAAFPAGEAdBundle::layout.html.twig' %}
+{% extends 'RAAFPAGEUserBundle::layout.html.twig' %}
 
 {% block javascripts %}
 {% javascripts '@RAAFPAGEAdBundle/Resources/public/js/fileUploader/*' output='js/compiled/main.js' %}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}
-{% block page_content %}
 
-    <form action="{{ path('edit_add', {'id': property.id}) }}" class="form-upload-add" novalidate
+{% block page_css %}
+    {% stylesheets output="bundles/adBundle/css/ad.css"
+    '@RAAFPAGEAdBundle/Resources/public/css/upload-form.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
+
+
+{% block page_content %}
+<form action="{{ path('edit_add', {'id': property.id}) }}" class="form-upload-add" novalidate
     method="post" enctype="multipart/form-data" id="MyUploadForm">
     <div class="block-container">
         {% if error != '' %}
             <div class="error">{{ error }}</div>
         {% endif %}
         <p class="form-group">
+            {#<p>Write a short description of your ad and include all of the key highlights.</p>#}
             {{ form_label(form.title, null, {'label_attr': {'title': 'Ad title', 'class':'label'}}) }}
             {{ form_widget(form.title) }}
+            <span class="error">This field is required</span>
         </p>
 
         <p class="form-group">
+            {#<p>Add details of your ad. Mention any other costs that need to be paid,#}
+            {#such as a deposit, utility bills, or agency fees.#}
+        {#</p>#}
             {{ form_label(form.description, null, {'label_attr': {'title': 'Description'}}) }}
             {{ form_widget(form.description, {'attr': {'class': 'textarea' }}) }}
+            <span class="error">This field is required</span>
         </p>
-
     </div>
 
     <div class="block-container">
+        <div class="block-container-header">
+            You can add up to 4 images (up to 9mb per upload).
+            Upload as many clear images as possible; this will get your ad more views and replies!
+        </div>
+
+        <div class="block-container-image-holder">
         <!-- spinner loading image -->
         <img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>
         {% for key, value in  images%}
             <div class="img-wrap">
+                {% if value == 'missing' %}
                 <div class="output" data-image-id="{{ temporaryAdId }}_{{ key + 1 }}">
-                    {% if value == 'missing' %}
-                        <img src="{{ asset('images/noimage.png') }}" id="no-image" class="no-image"/>
-                        <input name="image_file" class="image_file" id="imageInput" type="file" />
-                    {% else %}
+                    <img src="{{ asset('images/noimage.png') }}" height="100" width="100" id="no-image" class="no-image"/>
+                    <input name="image_file" class="image_file" id="imageInput" type="file" />
+                </div>
+                {% else %}
+                    <div class="output" data-image-id="{{ value }}">
                         <img src="{{ asset(value) }}">
                         <span class="close">&times;</span>
-                    {% endif %}
                     </div>
+                {% endif %}
             </div>
         {% endfor %}
-
-        <div class="block-container">
-        <p class="form-group">
-            {{ form_label(form.rent, null, {'label_attr': {'title': 'Rent'}}) }}
-            <error>{{ form_errors(form.rent) }}</error>
-            {{ form_widget(form.rent) }}
-        </p>
-
-        <p class="form-group">
-            {{ form_label(form.date_available, null, {'label_attr': {'title': 'Rent'}}) }}
-            <error>{{ form_errors(form.date_available) }}</error>
-            {{ form_widget(form.date_available) }}
-        </p>
+        </div>
     </div>
 
     <div class="block-container">
         <p class="form-group">
-            {{ form_label(form.available_to_couple, null, {'label_attr': {'title': 'Rent'}}) }}
-            <error>{{ form_errors(form.available_to_couple) }}</error>
+            {{ form_label(form.rent, null, {'label_attr': {'title': 'Rent'}}) }}
+            {{ form_widget(form.rent) }}
+            <span class="error">This field is required</span>
+        </p>
+
+        <p class="form-group">
+            {{ form_label(form.date_available, null, {'label_attr': {'title': 'Date available'}}) }}
+            {{ form_widget(form.date_available) }}
+            <span class="error">This field is required</span>
+        </p>
+
+        <p class="form-group">
+            {{ form_label(form.available_to_couple, null, {'label_attr': {'title': 'Available to couple'}}) }}
             {{ form_widget(form.available_to_couple) }}
+            <span class="error">This field is required</span>
         </p>
 
         <p class="form-group">
             {{ form_label(form.is_agent) }}
-            <error>{{ form_errors(form.is_agent) }}</error>
             {{ form_widget(form.is_agent) }}
+            <span class="error">This field is required</span>
         </p>
-    <p class="form-group">
-        {{ form_label(form.rent_period) }}
-        <error>{{ form_errors(form.rent_period) }}</error>
-        {{ form_widget(form.rent_period) }}
-    </p>
-    <p class="form-group">
-        {{ form_label(form.link) }}
-        <error>{{ form_errors(form.link) }}</error>
-        {{ form_widget(form.link) }}
-    </p>
-    <p class="form-group">
-        {{ form_label(form.property_type) }}
-        <error>{{ form_errors(form.property_type) }}</error>
-        {{ form_widget(form.property_type) }}
-    </p>
+
+        <p class="form-group">
+            {{ form_label(form.rent_period) }}
+            <error>{{ form_errors(form.rent_period) }}</error>
+            {{ form_widget(form.rent_period) }}
+        </p>
+        <p class="form-group">
+            {{ form_label(form.link) }}
+            {{ form_widget(form.link) }}
+            <span class="error"></span>
+        </p>
+        <p class="form-group">
+            {{ form_label(form.property_type) }}
+            {{ form_widget(form.property_type) }}
+        </p>
     </div>
 
     <div class="block-container">
-        Please select at least one following option to be contacted by:<br>
+        <p class="block-container-header">
+            Please add contact details to be contacted regarding this advertisement
+        </p>
         <p class="form-group">
-            {{ form_widget(form.contact_email) }} Contact Email {{ form_widget(form.contact_email_address) }}
+            {{ form_label(form.contact_email_address) }}
+            {{ form_widget(form.contact_email_address) }}
+            <span class="error">This field is required</span>
         </p>
 
         <p class="form-group">
-            {{ form_widget(form.contact_phone) }} Contact Number {{ form_widget(form.contact_phone_number) }}
+            {{ form_label(form.contact_phone_number) }}
+            {{ form_widget(form.contact_phone_number) }}
+            <span class="error">This field is required</span>
         </p>
 
         <p class="form-group">
-            Contact Name:   {{ form_widget(form.contact_name) }}
+            {{ form_label(form.contact_name) }}
+            {{ form_widget(form.contact_name) }}
+            <span class="error">This field is required</span>
         </p>
 
         <p class="form-group">
@@ -112,11 +142,16 @@
             {% endfor %}
         </p>
     </div>
-    <input type="temporaryAdId" value="{{ temporaryAdId }}" type="hidden">
-    <div class="block-container">
 
-        <input type="submit" name="Save" value="Save" id="save">
-        {{ form_rest(form) }}
+    <div class="block-container">
+        <div class="block-container-header">
+            By clicking 'Post my ad', you agree to Gumtree's terms of use, privacy policy and posting rules
+        </div>
+
+        <div class="block-container-image-holder">
+            <input type="submit" name="Save" value="Post my ad" id="save" data-property-id = "{{ property.id }}">
+            {{ form_rest(form) }}
+        </div>
     </div>
     </form>
 

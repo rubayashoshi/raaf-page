@@ -3,16 +3,18 @@ Registration/Login Form by html-form-guide.com
 You can customize all the aspects of the form in this style sheet
 */
 form#register {
-    width: 200px;
+    width: 400px;
 }
 
-form#register input {
-    width: 200px;
-    margin-bottom: 10px;
-}
+/*form#register input {*/
+    /*width: 200px;*/
+    /*margin-bottom: 10px;*/
+/*}*/
 
 #registration_label {
     margin-bottom: 5px;
+    float: left;
+    width: 150px !important;
 }
 
 #fg_membersite legend, #fg_membersite h2

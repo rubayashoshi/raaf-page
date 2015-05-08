@@ -1,12 +1,42 @@
-{% if error %}
-    <div>{{ error.message }}</div>
-{% endif %}
+{% extends 'RAAFPAGEUserBundle::layout.html.twig' %}
 
-<form action="{{ path('login_check') }}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="_username" value="{{ last_username }}" />
+{% block page_css %}
+    {% stylesheets output="bundles/UserBundle/css/login.css"
+    '@RAAFPAGEUserBundle/Resources/public/css/login.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="_password" />
-    <button type="submit">login</button>
-</form>
+{#{% block navigation %}#}
+    {#<div id='cssmenu'>#}
+        {#<ul>#}
+            {#<li><a href='#'>ACCOUNT DETAILS</a></li>#}
+            {#<li><a href='{{ path('ad_list') }}'>ALL ADS</a></li>#}
+            {#<li><a href='{{ path('logout') }}'>LOGOUT</a></li>#}
+        {#</ul>#}
+    {#</div>#}
+{#{% endblock %}#}
+{% block content %}
+    {% block page_content %}
+        <div id="login-page-container">
+            <div id="login-form-container">
+                {% if error %}
+                    <div id="error-message">{{ error.message }}</div>
+                {% endif %}
+
+                <form action="{{ path('login_check') }}" method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="_username">
+                    <label for="password">Password:</label>
+                    <p><a href="#">Forgot your password?</a></p>
+                    <input type="password" id="password" name="_password">
+                    <div id="lower">
+                        <input type="checkbox"><label class="check" for="checkbox">Keep me logged in</label>
+                        <input type="submit" value="Login">
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}

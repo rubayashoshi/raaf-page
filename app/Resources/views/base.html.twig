@@ -4,19 +4,28 @@
         <meta http-equiv="Content-Type" content="text/html"; charset=utf-8" />
         <title>{% block title %}HR PROJECT{% endblock %} - HR PROJECT</title>
         {% block stylesheets %}
-            <link href="{{ asset('css/screen.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('css/style.css') }}" type="text/css" rel="stylesheet" />
             <link href="{{ asset('css/registration.css') }}" type="text/css" rel="stylesheet" />
         {% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block layout_css %}{% endblock %}
+        {% block page_css %}{% endblock %}
+        {% block menu_css %}{% endblock %}
     </head>
     <body>
 
     <div id="container">
         <div id="header">
-            <h1>
-                MATCH GROOM WITH BRIDE
-            </h1>
+            <div class="header-left">
+                <a href="{{ path('raafpage_site_homepage') }}">RAAF PAGE</a>
+            </div>
+            <div class="header-right">
+                {% if app.user %}
+                    <a href="{{path('logout')}}">LOGOUT</a>
+                {% else %}
+                    <a href="{{ path('login') }}">Customer login</a>
+                {% endif %}
+            </div>
         </div>
         <div id="navigation">
             {% block navigation %}{% endblock %}
@@ -29,7 +38,10 @@
             {% block aside %}{% endblock %}
 
             <div id="footer">
-                Copyright © Site name, 20XX
+                <a href="">About us</a> | <a href="">Contact US</a> | <a href="">privacy Policy</a> |
+            </div>
+            <div id="copy-right">
+                Copyright © 2015 Raaf Page, UK. All rights reserved.
             </div>
         </div>
     </div>
