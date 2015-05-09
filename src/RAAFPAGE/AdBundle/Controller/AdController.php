@@ -6,6 +6,7 @@ use RAAFPAGE\AdBundle\Entity\Property;
 use RAAFPAGE\AdBundle\Form\Type\PropertyType;
 use RAAFPAGE\AdBundle\Service\AdManager;
 use RAAFPAGE\AdBundle\Service\FileUploader;
+use RAAFPAGE\AdBundle\Service\UploadedFileInfo;
 use RAAFPAGE\UserBundle\Entity\User;
 use RAAFPAGE\AdBundle\Service\FileImageInfo;
 
@@ -13,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdController extends Controller
 {
@@ -53,10 +55,11 @@ class AdController extends Controller
      * @Route("/seller/add/ajax-upload", name="upload_image")
      * @Template()
      */
-    public function ajaxUploadAction()
+    public function ajaxUploadAction(Request $request)
     {
         /** @var User $user */
         $user = $this->get('security.context')->getToken()->getUser();
+
         /** @var FileUploader $fileUploader*/
         $fileUploader = $this->get('raafpage.adbundle.file_uploader');
         $propertyId = $this->getRequest()->get('property_id');
@@ -72,53 +75,36 @@ class AdController extends Controller
 
 
         //continue only if $_POST is set and it is a Ajax request
-        if(isset($_POST) && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
+        if (isset($_POST) && $request->isXmlHttpRequest()) {
+            //store image information into UploadFileInfo class
+            UploadedFileInfo::populateImageInfo();
 
-            // check $_FILES['ImageFile'] not empty
-            if(!isset($_FILES['image_file']) || !is_uploaded_file($_FILES['image_file']['tmp_name'])){
-                die('Image file is Missing!'); // output error when above checks fail.
-            }
-
-            //uploaded file info we need to proceed
-            $imageName = $_FILES['image_file']['name']; //file name
-            $imageSize = $_FILES['image_file']['size']; //file size
-            $imageTemp = $_FILES['image_file']['tmp_name']; //file temp
-
-            $imageSizeInfo 	= getimagesize($imageTemp); //get image size
-
-            if($imageSizeInfo){
-                $image_width 		= $imageSizeInfo[0]; //image width
-                $image_height 		= $imageSizeInfo[1]; //image height
-                $image_type 		= $imageSizeInfo['mime']; //image type
-            }else{
-                die("Make sure image file is valid!");
-            }
-
-            //switch statement below checks allowed image type
-            //as well as creates new image from given file
-            switch($image_type){
+            switch (UploadedFileInfo::$imageType) {
                 case 'image/png':
-                    $image_res =  imagecreatefrompng($imageTemp); break;
+                    $imageRes =  imagecreatefrompng(UploadedFileInfo::$imageTmpName);
+                    break;
                 case 'image/gif':
-                    $image_res =  imagecreatefromgif($imageTemp); break;
-                case 'image/jpeg': case 'image/pjpeg':
-                $image_res = imagecreatefromjpeg($imageTemp); break;
+                    $imageRes =  imagecreatefromgif(UploadedFileInfo::$imageTmpName);
+                    break;
+                case 'image/jpeg':
+                case 'image/pjpeg':
+                    $imageRes = imagecreatefromjpeg(UploadedFileInfo::$imageTmpName);
+                    break;
                 default:
-                    $image_res = false;
+                    $imageRes = false;
             }
 
-            if($image_res){
-                //Get file extension and name to construct new file name
-                $image_info = pathinfo($imageName);
-                $image_extension = strtolower($image_info["extension"]); //image extension
-                $image_name_only = strtolower($image_info["filename"]);//file name only, no extension
-
-                //create a random name for new image (Eg: fileName_293749.jpg) ;
-                //$new_file_name = $image_name_only. '_' .  rand(0, 9999999999) . '.' . $image_extension;
-                $new_file_name = $_POST['image_id'] . '.' . $image_extension;
-
-                FileImageInfo::setImageName($user->getId(), $new_file_name);
+            if ($imageRes) {
+                if ($propertyId > 0) {
+                    $newFileName = $_POST['image_id'] . '.' . UploadedFileInfo::$imageExtension;
+                } else {
+                    $newFileName = $_POST['image_id'];
+                }
+                $arr = explode('/', $newFileName);
+                $lastPart = $arr[count($arr) - 1];
+                FileImageInfo::setImageName($user->getId(), $lastPart);
                 $normalImageFolderPath = FileImageInfo::getNormalImageDestinationPath();
+
                 if ($propertyId > 0) {
                     $adManager->addImageToProperty($property, $this->getDoctrine()->getManager(), $fileUploader, $normalImageFolderPath);
                 }
@@ -126,23 +112,23 @@ class AdController extends Controller
                 //call normal_resize_image() function to proportionally resize image
                 if(
                 $fileUploader->normalResizeImage(
-                    $image_res,
+                    $imageRes,
                     $normalImageFolderPath,
-                    $image_type,
+                    UploadedFileInfo::$imageType,
                     FileImageInfo::$max_image_size,
-                    $image_width,
-                    $image_height,
+                    UploadedFileInfo::$imageWidth,
+                    UploadedFileInfo::$imageHeight,
                     FileImageInfo::$jpeg_quality
                     )
-                ){
+                ) {
                     //call crop_image_square() function to create square thumbnails
-                    if(!$fileUploader->cropImageSquare(
-                        $image_res,
+                    if (!$fileUploader->cropImageSquare(
+                        $imageRes,
                         FileImageInfo::getThumbImageDestinationPath(),
-                        $image_type,
+                        UploadedFileInfo::$imageType,
                         FileImageInfo::$_thumb_square_size,
-                        $image_width,
-                        $image_height,
+                        UploadedFileInfo::$imageWidth,
+                        UploadedFileInfo::$imageHeight,
                         FileImageInfo::$jpeg_quality)
                     ) {
                         die('Error Creating thumbnail');
@@ -157,7 +143,7 @@ class AdController extends Controller
                 }
 
                 //freeup memory
-                imagedestroy($image_res);
+                imagedestroy($imageRes);
             }
         }
 

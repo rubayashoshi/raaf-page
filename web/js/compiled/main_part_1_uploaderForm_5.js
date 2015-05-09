@@ -41,7 +41,7 @@ uploadForm.prototype = {
             if ($('#MyUploadForm').hasClass('fileUploadPressed')) {
                 //event.preventDefault();
                 $('#MyUploadForm').removeClass('fileUploadPressed');
-
+                console.log('image-id:' + _this.imageId);
                 $(this).ajaxSubmit({
                     url: 'http://raaf-page.local/app_dev.php/seller/add/ajax-upload',
                     data: {'image_id': _this.imageId, 'property_id': parseInt(_this.propertyId)},

@@ -19,91 +19,138 @@ class FileUploader
      */
     protected $entityManager;
 
+    /**
+     * @param EntityManager $entityManager
+     */
     public function __constructor(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    #####  This function will proportionally resize image #####
-    public function normalResizeImage($source, $destination, $image_type, $max_size, $image_width, $image_height, $quality){
-
+    /**
+     * @param $source
+     * @param $destination
+     * @param $imageType
+     * @param $maxSize
+     * @param $imageWidth
+     * @param $imageHeight
+     * @param $quality
+     * @return bool
+     */
+    public function normalResizeImage(
+        $source,
+        $destination,
+        $imageType,
+        $maxSize,
+        $imageWidth,
+        $imageHeight,
+        $quality
+    ) {
         //return false if nothing to resize
-        if($image_width <= 0 || $image_height <= 0) {
+        if ($imageWidth <= 0 || $imageHeight <= 0) {
             return false;
         }
 
         //do not resize if image is smaller than max size
-        if($image_width <= $max_size && $image_height <= $max_size){
-            if($this->saveImage($source, $destination, $image_type, $quality)){
+        if ($imageWidth <= $maxSize && $imageHeight <= $maxSize) {
+            if ($this->saveImage($source, $destination, $imageType, $quality)) {
                 return true;
             }
         }
 
         //Construct a proportional size of new image
-        $image_scale  = min($max_size/$image_width, $max_size/$image_height);
-        $new_width	  = ceil($image_scale * $image_width);
-        $new_height	  = ceil($image_scale * $image_height);
+        $imageScale  = min($maxSize/$imageWidth, $maxSize/$imageHeight);
+        $newWidth	  = ceil($imageScale * $imageWidth);
+        $newHeight	  = ceil($imageScale * $imageHeight);
+
         //Create a new true color image
-        $new_canvas	  = imagecreatetruecolor( $new_width, $new_height );
+        $newCanvas	  = imagecreatetruecolor( $newWidth, $newHeight );
 
         //Copy and resize part of an image with resampling
-        if(imagecopyresampled($new_canvas, $source, 0, 0, 0, 0, $new_width, $new_height, $image_width, $image_height)) {
-            //save resized image
-            $this->saveImage($new_canvas, $destination, $image_type, $quality);
+        if (imagecopyresampled($newCanvas, $source, 0, 0, 0, 0, $newWidth, $newHeight, $imageWidth, $imageHeight)) {
+            $this->saveImage($newCanvas, $destination, $imageType, $quality);
         }
 
         return true;
     }
 
-    ##### This function corps image to create exact square, no matter what its original size! ######
-    public function cropImageSquare($source, $destination, $image_type, $square_size, $image_width, $image_height, $quality){
+    /**
+     * @param $source
+     * @param $destination
+     * @param $imageType
+     * @param $squareSize
+     * @param $imageWidth
+     * @param $imageHeight
+     * @param $quality
+     * @return bool
+     */
+    public function cropImageSquare(
+        $source,
+        $destination,
+        $imageType,
+        $squareSize,
+        $imageWidth,
+        $imageHeight,
+        $quality
+    ) {
         //return false if nothing to resize
-        if($image_width <= 0 || $image_height <= 0){
+        if ($imageWidth <= 0 || $imageHeight <= 0) {
             return false;
         }
 
-        if( $image_width > $image_height )
-        {
-            $y_offset = 0;
-            $x_offset = ($image_width - $image_height) / 2;
-            $s_size 	= $image_width - ($x_offset * 2);
+        if( $imageWidth > $imageHeight ) {
+            $offsetY = 0;
+            $offsetX = ($imageWidth - $imageHeight) / 2;
+            $sizeS 	= $imageWidth - ($offsetX * 2);
         } else {
-            $x_offset = 0;
-            $y_offset = ($image_height - $image_width) / 2;
-            $s_size = $image_height - ($y_offset * 2);
+            $offsetX = 0;
+            $offsetY = ($imageHeight - $imageWidth) / 2;
+            $sizeS = $imageHeight - ($offsetY * 2);
         }
 
-        $new_canvas	= imagecreatetruecolor( $square_size, $square_size); //Create a new true color image
+        //Create a new true color image
+        $newCanvas	= imagecreatetruecolor( $squareSize, $squareSize);
 
         //Copy and resize part of an image with resampling
-        if(imagecopyresampled($new_canvas, $source, 0, 0, $x_offset, $y_offset, $square_size, $square_size, $s_size, $s_size)){
-            $this->saveImage($new_canvas, $destination, $image_type, $quality);
+        if (imagecopyresampled($newCanvas, $source, 0, 0, $offsetX, $offsetY, $squareSize, $squareSize, $sizeS, $sizeS)) {
+            $this->saveImage($newCanvas, $destination, $imageType, $quality);
         }
 
         return true;
     }
 
-    ##### Saves image resource to file #####
-    public function saveImage($source, $destination, $image_type, $quality)
+    /**
+     * @param $source
+     * @param $destination
+     * @param $imageType
+     * @param $quality
+     * @return bool
+     */
+    public function saveImage($source, $destination, $imageType, $quality)
     {
         //determine mime type
-        switch(strtolower($image_type)){
+        switch(strtolower($imageType)){
             case 'image/png':
-                //save png file
-                imagepng($source, $destination); return true;
+                imagepng($source, $destination);
+                return true;
                 break;
             case 'image/gif':
-                //save gif file
-                imagegif($source, $destination); return true;
+                imagegif($source, $destination);
+                return true;
                 break;
             case 'image/jpeg': case 'image/pjpeg':
-                //save jpeg file
-                imagejpeg($source, $destination, $quality); return true;
-            break;
-            default: return false;
+                imagejpeg($source, $destination, $quality);
+                return true;
+                break;
+            default:
+                return false;
         }
     }
 
+    /**
+     * @param Property $property
+     * @param int $userId
+     */
     public function moveImageTo(Property $property, $userId)
     {
         //todo if same image is already exists in the property, then delete it
@@ -166,12 +213,20 @@ class FileUploader
         }
     }
 
+    /**
+     * @param string $filename
+     * @return mixed
+     */
     private function getFileName($filename)
     {
         $parts = explode( "/", $filename );
+
         return $parts[count($parts) - 1];
     }
 
+    /**
+     * @param int $imageId
+     */
     public function removeImage($imageId)
     {
         foreach (glob("/home/foodity/www/raaf-page/web/uploads/temp/*{$imageId}*") as $filename) {
@@ -179,11 +234,13 @@ class FileUploader
         }
     }
 
+    /**
+     * @param int $imageId
+     */
     public function removeImageForExistingProperty($imageId)
     {
         foreach (glob("/home/foodity/www/raaf-page/web/uploads/property/*{$imageId}*") as $filename) {
             unlink($filename);
         }
     }
-
 }

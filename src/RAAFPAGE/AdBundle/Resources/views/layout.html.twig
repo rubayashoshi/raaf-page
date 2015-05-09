@@ -1,19 +1,40 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}RAAFPAGE - SELLER ADMIN{% endblock %}
+{% block javascripts %}
+    {% javascripts  output='js/compiled/site.js'
+    '@RAAFPAGEAdBundle/Resources/public/js/fileUploader/*'
+    '@RAAFPAGEUserBundle/Resources/public/js/*'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block layout_css %}
-    {% stylesheets output="bundles/adBundle/css/ad.css"
-        '@RAAFPAGEAdBundle/Resources/public/css/upload-form.css'
+    {% stylesheets output="bundles/UserBundle/css/screen.css"
+    '@RAAFPAGESiteBundle/Resources/public/css/site-home-page.css'
     %}
     <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
     {% endstylesheets %}
 {% endblock %}
+
 {% block menu_css %}
-    {% stylesheets output="bundles/AdBundle/css/menu.css"
+    {% stylesheets output="bundles/UserBundle/css/menu.css"
     '@RAAFPAGEUserBundle/Resources/public/css/menu.css'
     %}
     <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
     {% endstylesheets %}
+{% endblock %}
+
+{% block navigation %}
+    <div id='cssmenu'>
+        <ul>
+            <li><a href='#'>PROFILE</a></li>
+            <li><a href='#'>MANAGE ADS</a></li>
+            <li><a href='#'>POST AN ADD</a></li>
+            <li><a href='#'>HELP</a></li>
+        </ul>
+        </ul>
+    </div>
 {% endblock %}
 {% block content %}
     {% block page_content %}{% endblock %}
