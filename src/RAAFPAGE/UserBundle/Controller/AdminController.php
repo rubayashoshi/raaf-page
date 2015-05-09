@@ -2,11 +2,9 @@
 
 namespace RAAFPAGE\UserBundle\Controller;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use RAAFPAGE\UserBundle\Entity\User;
 use RAAFPAGE\UserBundle\Form\Type\UserType;
 
-use Proxies\__CG__\RAAFPAGE\UserBundle\Entity\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminController extends Controller
 {
     /**
-     * Company admin home pahe
+     * Company admin home page
      * @return Response
      */
     public function homeAction()

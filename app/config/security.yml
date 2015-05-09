@@ -32,6 +32,8 @@ security:
             form_login:
                 check_path: login_check
                 login_path: login
+                always_use_default_target_path: true
+                default_target_path: /seller/add/list
             logout:
                 path:  /admin/logout
                 target: seller_home_page
