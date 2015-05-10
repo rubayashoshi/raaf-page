@@ -9,6 +9,7 @@ class FileImageInfo
     public static $thumb_prefix		  = "thumb_";
     public static $uploadDirectoryForTempImage = 'uploads/temp/';
     public static $imageWebPath = 'uploads/property/';
+    public static $imageBaseDir = '/home/foodity/www/raaf-page-backup/web/';
     public static $tempDestinationPath = '/home/foodity/www/raaf-page-backup/web/uploads/temp/';
     public static $uploadDirectoryPath = '/home/foodity/www/raaf-page-backup/web/uploads/property/';
     public $image_width;

@@ -13,6 +13,7 @@ var uploadForm = function () {
     this.phoneElement = $('#property_form_contact_phone_number');
     this.contactNameElement = $('#property_form_contact_name');
     this.propertyTypeElement = $('#property_form_property_type');
+    this.adTypeElement = $('#property_form_add_type');
 };
 
 uploadForm.prototype = {
@@ -67,16 +68,27 @@ uploadForm.prototype = {
             $(document).find('#no_image_hidden').data('image-id', imageId);
             var arr = imageId.split('/');
 
+            var imageNamePartWithoutExtension = imageId.split('.');
+            var imageNamePartWithoutExtensionPart = imageNamePartWithoutExtension[0].split('/');
+            var imageNamePartWithoutExtensionPartPart = imageNamePartWithoutExtensionPart[2].split('_');
+            var imageName = imageNamePartWithoutExtensionPartPart[2] + '_' + imageNamePartWithoutExtensionPartPart[3];
+
             if ($('#save').data('property-id') > 0) {
                 imageId = arr[2];
             }
 
             var noImageHtml = '<img height="100" width="100" src="/images/noimage.png" id="no-image" class="no-image">';
             noImageHtml += '<input name="image_file" class="image_file" id="imageInput" type="file">';
+            console.log('removing image::::::::' + "http://raaf-page.local/app_dev.php/seller/add/delete-image/" + imageId);
 
             $.post("http://raaf-page.local/app_dev.php/seller/add/delete-image/" + imageId,{'property_id': parseInt(_this.propertyId)},function() {
                 parent.find('.output').empty();
                 parent.find('.output').append(noImageHtml);
+                //replace previous image id
+                console.log('present value' + parent.find('.output').data('image-id'));
+                console.log('replacing image-id::' + imageName);
+                parent.find('.output').data('image-id', imageName);
+                parent.find('.output').addClass('test');
             });
         });
     },
@@ -86,7 +98,6 @@ uploadForm.prototype = {
         errorElement.empty().text(message);
     },
     _validateOnSubmit: function (event) {
-        console.log('form has been submitted....');
         var error_free=true;
         var _this = this;
         $(document).find('span').removeClass('error_show').addClass('error');
@@ -138,77 +149,16 @@ uploadForm.prototype = {
             _this._addErrorMessage(_this.contactNameElement, 'Contact name field is mandatory.');
         }
 
-//        if (!_this.propertyTypeElement.find('input[type="radio"]').val()) {
-//            error_free = false;
-//            _this._addErrorMessage(_this.contactNameElement, 'Contact name field is mandatory.');
-//        }
-//
+        //validate add_type
+        if ($(".add_type:checkbox:checked").length < 1) {
+            error_free = false;
+            _this._addErrorMessage(_this.adTypeElement, 'Please select at least one ad type.');
+        }
 
-//        //validate contact email
-//        if ($(this).attr('name').indexOf('contact_email_address') != -1) {
-//            if ($(this).val()) {
-//                if ($(this).val() && !_this.dataTypeValidator.isEmailValid(inputData)) {
-//                    error_free = false;
-//                    _this._addErrorMessage(errorElement, 'Oops, invalid email address!.');
-//                }
-//            }
-//        }
-//
-//        if ($(this).attr('name').indexOf('contact_phone_number') != -1) {
-//            if ($(this).val()) {
-//                if ($(this).val() && !_this.dataTypeValidator.isEmailValid(inputData)) {
-//                    error_free = false;
-//                    _this._addErrorMessage(errorElement, 'Oops, invalid email address!.');
-//                }
-//            }
-//        }
-//
-//        $("property_form_description").each(
-//            function () {
-//                var errorElement = $(this).parent().find("span");
-//
-//                if (!$(this).val()) {
-//                    error_free = false;
-//                    errorElement.removeClass("error").addClass("error_show");
-//                } else {
-//                    errorElement.removeClass("error_show").addClass("error");
-//                }
-//            }
-//        );
-//
-//        $( "input[name^='propedddrty_form']").each(
-//            function () {
-//                var errorElement = $(this).parent().find("span");
-//                var inputData = $(this).val();
-//
-//                if (!$(this).val()) {
-//                    error_free = false;
-//                    errorElement.removeClass("error").addClass("error_show");
-//                } else {
-//                    errorElement.removeClass("error_show").addClass("error");
-//                }
-//
-//            }
-//        );
-
-
-
-//        for (var input in form_data){
-//            var element=$("#MyUploadForm" + form_data[input]['name']);
-//            var valid=element.hasClass("valid");
-//            var error_element=$("span", element.parent());
-//            if (!valid){
-//                console.log('add class error_show' + error_element.html());
-//                error_element.removeClass("error").addClass("error_show");
-//                error_free=false;
-//            }
-//            else{error_element.removeClass("error_show").addClass("error");}
-//        }
-        if (!error_free){
+        if (!error_free) {
             console.log('form has error, hold on..');
             event.preventDefault();
-        }
-        else{
+        } else {
             console.log('form validation passed.....');
             alert('No errors: Form will be submitted');
         }

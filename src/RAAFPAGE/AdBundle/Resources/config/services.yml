@@ -7,3 +7,10 @@ services:
         class: RAAFPAGE\AdBundle\Service\AdManager
         arguments:
              - "@doctrine.orm.entity_manager"
+             - "@raafpage.ad_bundle.file_uploader"
+    raafpage.ad_bundle.file_manager:
+        class: RAAFPAGE\AdBundle\Service\FileManager
+        arguments:
+             - "@raafpage.ad_bundle.ad_manager"
+             - "@raafpage.ad_bundle.file_uploader"
+             - "@security.context"

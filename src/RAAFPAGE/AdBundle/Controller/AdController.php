@@ -5,9 +5,8 @@ namespace RAAFPAGE\AdBundle\Controller;
 use RAAFPAGE\AdBundle\Entity\Property;
 use RAAFPAGE\AdBundle\Form\Type\PropertyType;
 use RAAFPAGE\AdBundle\Service\AdManager;
+use RAAFPAGE\AdBundle\Service\FileManager;
 use RAAFPAGE\AdBundle\Service\FileUploader;
-use RAAFPAGE\AdBundle\Service\UploadedFileInfo;
-use RAAFPAGE\UserBundle\Entity\User;
 use RAAFPAGE\AdBundle\Service\FileImageInfo;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,15 +18,16 @@ use Symfony\Component\HttpFoundation\Request;
 class AdController extends Controller
 {
     /**
-     * @Route("/seller/add/list", name = "ad_list")
+     * @Route("/seller/ad/list", name = "ad_list")
      * @Template()
      */
     public function listAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
+
         /** @var AdManager $adManager */
         $adManager = $this->get('raafpage.adbundle.ad_manager');
-        $ads = $adManager->getAllAdsByUser($user, $this->getDoctrine()->getManager());
+        $ads = $adManager->getAllAdsByUser($user);
 
         return array('ads' => $ads);
     }
@@ -37,16 +37,11 @@ class AdController extends Controller
     */
     public function removeAction($imageId = null)
     {
-        /** @var FileUploader $fileUploader */
-        $fileUploader = $this->get('raafpage.adbundle.file_uploader');
-        $property = $this->getRequest()->get('property_id');
+        /** @var AdManager $addManager */
+        $propertyId = (int) $this->getRequest()->get('property_id');
 
-        //todo -- merge two into one with just folder path change
-        if ($property > 0) {
-            $fileUploader->removeImageForExistingProperty($imageId);
-        } else {
-            $fileUploader->removeImage($imageId);
-        }
+        $adManager = $this->get('raafpage.ad_bundle.ad_manager');
+        $adManager->removeImageFromExistingProperty($imageId, $propertyId);
 
         return new JsonResponse(array('status' => 'OK'));
     }
@@ -57,95 +52,30 @@ class AdController extends Controller
      */
     public function ajaxUploadAction(Request $request)
     {
-        /** @var User $user */
-        $user = $this->get('security.context')->getToken()->getUser();
-
-        /** @var FileUploader $fileUploader*/
-        $fileUploader = $this->get('raafpage.adbundle.file_uploader');
-        $propertyId = $this->getRequest()->get('property_id');
-
-        /** @var AdManager $adManager */
-        $adManager = $this->get('raafpage.adbundle.ad_manager');
-        $property = false;
-
-        if ($propertyId > 0) {
-            $property = $adManager->getPropertyById($propertyId, $this->getDoctrine()->getManager());
-            FileImageInfo::setPropertyId($propertyId);
-        }
-
-
-        //continue only if $_POST is set and it is a Ajax request
         if (isset($_POST) && $request->isXmlHttpRequest()) {
-            //store image information into UploadFileInfo class
-            UploadedFileInfo::populateImageInfo();
+            /** @var FileManager $fileManager */
+            $fileManager = $this->get('raafpage.ad_bundle.file_manager');
+            $propertyId = $this->getRequest()->get('property_id');
+            //add entry into images table and link to existing property
 
-            switch (UploadedFileInfo::$imageType) {
-                case 'image/png':
-                    $imageRes =  imagecreatefrompng(UploadedFileInfo::$imageTmpName);
-                    break;
-                case 'image/gif':
-                    $imageRes =  imagecreatefromgif(UploadedFileInfo::$imageTmpName);
-                    break;
-                case 'image/jpeg':
-                case 'image/pjpeg':
-                    $imageRes = imagecreatefromjpeg(UploadedFileInfo::$imageTmpName);
-                    break;
-                default:
-                    $imageRes = false;
+            if ($propertyId > 0) {
+                FileImageInfo::setPropertyId($propertyId);
             }
 
-            if ($imageRes) {
-                if ($propertyId > 0) {
-                    $newFileName = $_POST['image_id'] . '.' . UploadedFileInfo::$imageExtension;
-                } else {
-                    $newFileName = $_POST['image_id'] . '.' . UploadedFileInfo::$imageExtension;
-                }
+            $filePathTemp = $fileManager->uploadAnImageAndReturnWebPath();
 
-                $arr = explode('/', $newFileName);
-                $lastPart = $arr[count($arr) - 1];
-                FileImageInfo::setImageName($user->getId(), $lastPart);
+            if ($propertyId > 0) {
+                /** @var AdManager $adManager */
+                $adManager = $this->get('raafpage.ad_bundle.ad_manager');
+                //add normal size image into property
                 $normalImageFolderPath = FileImageInfo::getNormalImageDestinationPath();
+                $adManager->addImageToProperty($propertyId, $normalImageFolderPath);
 
-                if ($propertyId > 0) {
-                    $adManager->addImageToProperty($property, $this->getDoctrine()->getManager(), $fileUploader, $normalImageFolderPath);
-                }
-
-                //call normal_resize_image() function to proportionally resize image
-                if(
-                $fileUploader->normalResizeImage(
-                    $imageRes,
-                    $normalImageFolderPath,
-                    UploadedFileInfo::$imageType,
-                    FileImageInfo::$max_image_size,
-                    UploadedFileInfo::$imageWidth,
-                    UploadedFileInfo::$imageHeight,
-                    FileImageInfo::$jpeg_quality
-                    )
-                ) {
-                    //call crop_image_square() function to create square thumbnails
-                    if (!$fileUploader->cropImageSquare(
-                        $imageRes,
-                        FileImageInfo::getThumbImageDestinationPath(),
-                        UploadedFileInfo::$imageType,
-                        FileImageInfo::$_thumb_square_size,
-                        UploadedFileInfo::$imageWidth,
-                        UploadedFileInfo::$imageHeight,
-                        FileImageInfo::$jpeg_quality)
-                    ) {
-                        die('Error Creating thumbnail');
-                    }
-
-                    //$filePathTemp = FileImageInfo::getImageFullName($user->getId(), $new_file_name);
-                    $filePathTemp = FileImageInfo::getImageFullName();
-
-                    if ($propertyId > 0) {
-                        $adManager->addImageToProperty($property, $this->getDoctrine()->getManager(), $fileUploader, $filePathTemp);
-                    }
-                }
-
-                //freeup memory
-                imagedestroy($imageRes);
+                //add thumb image into property
+                $thumbImageFolderPath = FileImageInfo::getThumbImageDestinationPath();
+                $adManager->addImageToProperty($propertyId, $thumbImageFolderPath);
             }
+
         }
 
         return array('path' => $filePathTemp.'?id='.time());

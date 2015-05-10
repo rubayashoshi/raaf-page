@@ -178,7 +178,8 @@ class FileUploader
         $image = new Image();
         $image->setProperty($property);
         $image->setAddress(FileImageInfo::$imageWebPath.$onlyFileName);
-        $image->setName($fileName);
+        $image->setName($onlyFileName);
+
         $property->addImage($image);
     }
 
@@ -227,9 +228,9 @@ class FileUploader
     /**
      * @param int $imageId
      */
-    public function removeImage($imageId)
+    public function removeImageForExistingProperty($imageId)
     {
-        foreach (glob(FileImageInfo::$tempDestinationPath."*{$imageId}*") as $filename) {
+        foreach (glob(FileImageInfo::$uploadDirectoryPath."*{$imageId}*") as $filename) {
             unlink($filename);
         }
     }
@@ -237,9 +238,9 @@ class FileUploader
     /**
      * @param int $imageId
      */
-    public function removeImageForExistingProperty($imageId)
+    public function removeImageForNewProperty($imageId)
     {
-        foreach (glob(FileImageInfo::$uploadDirectoryPath."*{$imageId}*") as $filename) {
+        foreach (glob(FileImageInfo::$uploadDirectoryForTempImage."*{$imageId}*") as $filename) {
             unlink($filename);
         }
     }
@@ -281,9 +282,10 @@ class FileUploader
         $i = 0;
         foreach ($property->getImages() as $image) {
             if (stripos($image->getAddress(), 'thumb')) {
-                unset($images[$i]);
-                $images[$i] =  $image->getAddress();
-                $i++;
+                if (FileManager::isImageExists($image->getAddress())) {
+                    $images[$i] = $image->getAddress();
+                    $i++;
+                }
             }
         }
 
