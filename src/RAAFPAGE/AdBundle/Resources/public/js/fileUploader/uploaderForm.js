@@ -13,6 +13,7 @@ var uploadForm = function () {
     this.phoneElement = $('#property_form_contact_phone_number');
     this.contactNameElement = $('#property_form_contact_name');
     this.propertyTypeElement = $('#property_form_property_type');
+    this.adTypeElement = $('#property_form_add_type');
 };
 
 uploadForm.prototype = {
@@ -73,7 +74,7 @@ uploadForm.prototype = {
 
             var noImageHtml = '<img height="100" width="100" src="/images/noimage.png" id="no-image" class="no-image">';
             noImageHtml += '<input name="image_file" class="image_file" id="imageInput" type="file">';
-
+            console.log('removing image::::::::' + "http://raaf-page.local/app_dev.php/seller/add/delete-image/" + imageId);
             $.post("http://raaf-page.local/app_dev.php/seller/add/delete-image/" + imageId,{'property_id': parseInt(_this.propertyId)},function() {
                 parent.find('.output').empty();
                 parent.find('.output').append(noImageHtml);
@@ -136,6 +137,12 @@ uploadForm.prototype = {
         if (!_this.contactNameElement.val()) {
             error_free = false;
             _this._addErrorMessage(_this.contactNameElement, 'Contact name field is mandatory.');
+        }
+
+        //validate add_type
+        if($(".add_type:checkbox:checked").length > 0){
+            error_free = false;
+            _this._addErrorMessage(_this.adTypeElement, 'Please select at least one ad type.');
         }
 
 //        if (!_this.propertyTypeElement.find('input[type="radio"]').val()) {

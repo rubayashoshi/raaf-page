@@ -15,6 +15,8 @@ class FileImageInfo
     public static $imageName = '';
     public static $propertyId;
 
+    public static $maxNumberOfImages = 8;
+
     /**
      * @param int $propertyId
      */

@@ -16,27 +16,20 @@
 
 
 {% block page_content %}
-    {% if (error) %}
-        <div class="form-error">{{ error }}</div>
-    {% endif %}
-
-    <form action="{{ path('edit_add', {'id': property.id}) }}" class="form-upload-add" novalidate
+    <form action="{{ path('add_ad') }}" class="form-upload-add" novalidate
         method="post" enctype="multipart/form-data" id="MyUploadForm">
         <div class="block-container">
             {% if error != '' %}
-                <div class="error">{{ error }}</div>
+                <div class="form-error">{{ error }}</div>
             {% endif %}
+
             <p class="form-group">
-                {#<p>Write a short description of your ad and include all of the key highlights.</p>#}
                 {{ form_label(form.title, null, {'label_attr': {'title': 'Ad title', 'class':'label'}}) }}
                 {{ form_widget(form.title) }}
                 <span class="error">This field is required</span>
             </p>
 
             <p class="form-group">
-                {#<p>Add details of your ad. Mention any other costs that need to be paid,#}
-                {#such as a deposit, utility bills, or agency fees.#}
-            {#</p>#}
                 {{ form_label(form.description, null, {'label_attr': {'title': 'Description'}}) }}
                 {{ form_widget(form.description, {'attr': {'class': 'textarea' }}) }}
                 <span class="error">This field is required</span>
@@ -45,8 +38,8 @@
 
         <div class="block-container">
             <div class="block-container-header">
-                You can add up to 4 images (up to 9mb per upload).
-                Upload as many clear images as possible; this will get your ad more views and replies!
+                You can add up to 8 images (max 10mb per image).
+                Upload images with good quality that increase possibility of getting customer.
             </div>
 
             <div class="block-container-image-holder">
@@ -54,17 +47,10 @@
             <img src="{{ asset('images/ajax-loader.gif') }}" id="loading-img" style="display:none;" alt="Please Wait"/>
             {% for key, value in  images%}
                 <div class="img-wrap">
-                    {% if value == 'missing' %}
                     <div class="output" data-image-id="{{ temporaryAdId }}_{{ key + 1 }}">
                         <img src="{{ asset('images/noimage.png') }}" height="100" width="100" id="no-image" class="no-image"/>
                         <input name="image_file" class="image_file" id="imageInput" type="file" />
                     </div>
-                    {% else %}
-                        <div class="output" data-image-id="{{ value }}">
-                            <img src="{{ asset(value) }}">
-                            <span class="close">&times;</span>
-                        </div>
-                    {% endif %}
                 </div>
             {% endfor %}
             </div>
@@ -142,7 +128,8 @@
                         {% endif %}
                     {% endfor %}
                     <label>{{ type.name }}</label>
-                    <input type="checkbox" name="add_type[]" value="{{ type.id }}" {{ checked }}>
+                    <input type="checkbox" class="add_type" name="add_type[]" value="{{ type.id }}" {{ checked }}>
+                    <span class="error">At least one ad type is required</span>
                 {% endfor %}
             </p>
         </div>

@@ -229,7 +229,7 @@ class FileUploader
      */
     public function removeImage($imageId)
     {
-        foreach (glob("/home/foodity/www/raaf-page/web/uploads/temp/*{$imageId}*") as $filename) {
+        foreach (glob(FileImageInfo::$tempDestinationPath."*{$imageId}*") as $filename) {
             unlink($filename);
         }
     }
@@ -239,8 +239,54 @@ class FileUploader
      */
     public function removeImageForExistingProperty($imageId)
     {
-        foreach (glob("/home/foodity/www/raaf-page/web/uploads/property/*{$imageId}*") as $filename) {
+        foreach (glob(FileImageInfo::$uploadDirectoryPath."*{$imageId}*") as $filename) {
             unlink($filename);
         }
+    }
+
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public function getImagesForNewAd($userId)
+    {
+        $images = array();
+
+        for ($i = 0; $i < FileImageInfo::$maxNumberOfImages; $i++) {
+            $images[$i] = 'missing';
+        }
+
+        $i = 0;
+
+        foreach (glob(FileImageInfo::$uploadDirectoryForTempImage.'thumb_'.$userId."_*") as $filename) {
+            $images[$i] = FileImageInfo::$uploadDirectoryForTempImage . $filename;
+            $i++;
+        }
+
+        return $images;
+    }
+
+    /**
+     * @param Property $property
+     * @return array
+     */
+    public function getImages(Property $property)
+    {
+        $images = array();
+
+        for ($i = 0; $i < FileImageInfo::$maxNumberOfImages; $i++) {
+            $images[$i] = 'missing';
+        }
+
+        $i = 0;
+        foreach ($property->getImages() as $image) {
+            if (stripos($image->getAddress(), 'thumb')) {
+                unset($images[$i]);
+                $images[$i] =  $image->getAddress();
+                $i++;
+            }
+        }
+
+        return $images;
     }
 }

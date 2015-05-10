@@ -98,8 +98,9 @@ class AdController extends Controller
                 if ($propertyId > 0) {
                     $newFileName = $_POST['image_id'] . '.' . UploadedFileInfo::$imageExtension;
                 } else {
-                    $newFileName = $_POST['image_id'];
+                    $newFileName = $_POST['image_id'] . '.' . UploadedFileInfo::$imageExtension;
                 }
+
                 $arr = explode('/', $newFileName);
                 $lastPart = $arr[count($arr) - 1];
                 FileImageInfo::setImageName($user->getId(), $lastPart);
@@ -151,20 +152,15 @@ class AdController extends Controller
     }
 
     /**
-     * @Route("/seller/add/edit/{id}", name="edit_add")
+     * @Route("/seller/ad/edit/{id}", name="edit_add")
      * @Template()
      */
-    public function editAction($id=null)
+    public function editAction(Property $property)
     {
+        /** @var FileUploader $fileUploader */
+        $fileUploader = $this->get('raafpage.adbundle.file_uploader');
         $user = $this->get('security.context')->getToken()->getUser();
-        $temporaryAdId = time().$user->getId();
-
-        if ($id) {
-            $property = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Property')
-                ->find($id);
-        } else {
-            $property = new Property();
-        }
+        $temporaryAdId = time() . $user->getId();
 
         $form = $this->createForm(new PropertyType(), $property);
         $types = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
@@ -174,23 +170,83 @@ class AdController extends Controller
 
         if ($this->getRequest()->isMethod('POST')) {
             $form->handleRequest($this->getRequest());
+
             if ($form->isValid()) {
                 /** @var Property $property */
                 $property = $form->getData();
+
                 foreach ($property->getAdTypes() as $adType) {
                     $property->removeAdType($adType);
                 }
 
-                foreach ($_POST['add_type'] as $type) {
-                    $adType = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
-                        ->find($type);
-                    $property->addAdType($adType);
+                if (isset($_POST['add_type']) && count($_POST['add_type'])) {
+                    foreach ($_POST['add_type'] as $addTypeSelected) {
+                        $adType = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
+                            ->find($addTypeSelected);
+                        $property->addAdType($adType);
+                    }
+                }
+
+                $property->setUser($user);
+
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($property);
+                $manager->flush();
+
+                return $this->redirect($this->generateUrl('ad_list'));
+            } else {
+                $error = 'Form has some fields incomplete or missing,' .
+                    'please check and complete all required information.';
+            }
+        }
+
+        $images = $fileUploader->getImages($property);
+
+        return array('form' => $form->createView(),'images' => $images, 'temporaryAdId' => $temporaryAdId,'property' => $property, 'types' => $types, 'error' => $error);
+    }
+
+    /**
+     * @Route("/seller/ad/add", name="add_ad")
+     * @Template()
+     */
+    public function addAction()
+    {
+        /** @var FileUploader $fileUploader */
+        $fileUploader = $this->get('raafpage.adbundle.file_uploader');
+
+        $user = $this->get('security.context')->getToken()->getUser();
+        $temporaryAdId = time() . $user->getId();
+        $property = new Property();
+
+        $form = $this->createForm(new PropertyType(), $property);
+
+        $types = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
+            ->findAll();
+
+        $error = null;
+
+        if ($this->getRequest()->isMethod('POST')) {
+            $form->handleRequest($this->getRequest());
+
+            if ($form->isValid()) {
+                /** @var Property $property */
+                $property = $form->getData();
+
+                foreach ($property->getAdTypes() as $adType) {
+                    $property->removeAdType($adType);
+                }
+
+                if (isset($_POST['add_type']) && count($_POST['add_type'])) {
+                    foreach ($_POST['add_type'] as $addTypeSelected) {
+                        $adType = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:AdType')
+                            ->find($addTypeSelected);
+                        $property->addAdType($adType);
+                    }
                 }
 
                 //move images from temp folder and add them into database for new ad
                 /** @var FileUploader $fileUploader */
-                if (!$property->getId()) {
-                    $fileUploader = $this->get('raafpage.adbundle.file_uploader');
+                if (! $property->getId()) {
                     $fileUploader->moveImageTo($property, $user->getId());
                     //$fileUploader->attacheImageToProperty($property, $user->getId());
                 }
@@ -203,28 +259,12 @@ class AdController extends Controller
 
                 return $this->redirect($this->generateUrl('ad_list'));
             } else {
-                //var_dump($form->getErrorsAsString());die;
                 $error = 'Form has some fields incomplete or missing,' .
                     'please check and complete all required information.';
             }
         }
 
-        $images = array(
-            0 => 'missing',
-            1 => 'missing',
-            2 => 'missing',
-            3 => 'missing'
-        );
-
-        $i = 0;
-
-        foreach ($property->getImages() as $image) {
-            if (stripos($image->getAddress(), 'thumb')) {
-                unset($images[$i]);
-                $images[$i] =  $image->getAddress();
-                $i++;
-            }
-        }
+        $images = $fileUploader->getImagesForNewAd($user->getId());
 
         return array('form' => $form->createView(),'images' => $images, 'temporaryAdId' => $temporaryAdId,'property' => $property, 'types' => $types, 'error' => $error);
     }
