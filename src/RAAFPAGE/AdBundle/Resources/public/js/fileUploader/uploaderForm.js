@@ -79,16 +79,10 @@ uploadForm.prototype = {
 
             var noImageHtml = '<img height="100" width="100" src="/images/noimage.png" id="no-image" class="no-image">';
             noImageHtml += '<input name="image_file" class="image_file" id="imageInput" type="file">';
-            console.log('removing image::::::::' + "http://raaf-page.local/app_dev.php/seller/add/delete-image/" + imageId);
 
             $.post("http://raaf-page.local/app_dev.php/seller/add/delete-image/" + imageId,{'property_id': parseInt(_this.propertyId)},function() {
                 parent.find('.output').empty();
                 parent.find('.output').append(noImageHtml);
-                //replace previous image id
-                console.log('present value' + parent.find('.output').data('image-id'));
-                console.log('replacing image-id::' + imageName);
-                //parent.find('.output').data('image-id', imageName);
-                //parent.find('.output').addClass('test');
                 parent.find('.output').attr('data-image-id', imageName);
             });
         });
