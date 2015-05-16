@@ -1,7 +1,48 @@
 {% extends 'RAAFPAGEAdBundle::layout.html.twig' %}
+{% block page_css %}
+    {% stylesheets output="bundles/adBundle/css/ad-list.css"
+    '@RAAFPAGEAdBundle/Resources/public/css/ad-list.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
+
 {% block page_content %}
-    Display all add for an account:
+    {% set total = 4 %}
+    You current have {{ total }} ads active
+
     {% for ad in ads %}
-        <a href="{{  path('edit_add',{'id': ad.id})}}">Edit</a>
+        <div class="add-container">
+            <div class="add-container-body">
+                <div class="image-container">
+                    {% if images[ad.id] is defined %}
+                        <img src="{{ asset(images[ad.id]) }}">
+                    {% else %}
+                        <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT_rZyqGvG9j66DrsMPaQRVNp2QIhqnvmNavaUI_yJ4StU6LyO92VDAQg">
+                    {% endif %}
+                </div>
+                <div class="description-container">
+                    <div class="ad-title">{{ ad.title }}</div>
+                    <div class="ad-location">Walthamstow, London</div>
+                    <div class="ad-price">&pound;{{ ad.rent }}</div>
+                </div>
+                <div class="action-container">
+                    <ul>
+                        <li>Promote Ad</li>
+                        <li>Ad Statistics</li>
+                        <li><a href="{{  path('edit_add',{'id': ad.id})}}">Modify</a></li>
+                        <li>
+                            {% if ad.status.name == 'archived' %}
+                                Archived
+                            {% else %}
+                                <a href="{{  path('ad_delete',{'id': ad.id})}} disabled">Archive</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="add-container-footer">
+            </div>
+        </div>
     {% endfor %}
 {% endblock %}

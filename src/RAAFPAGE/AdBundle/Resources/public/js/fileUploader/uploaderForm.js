@@ -151,11 +151,8 @@ uploadForm.prototype = {
         }
 
         if (!error_free) {
-            console.log('form has error, hold on..');
+            alert('Please check all required fields are filled up with right information');
             event.preventDefault();
-        } else {
-            console.log('form validation passed.....');
-            alert('No errors: Form will be submitted');
         }
     }
 };

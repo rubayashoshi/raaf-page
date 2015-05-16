@@ -27,9 +27,22 @@ class AdController extends Controller
 
         /** @var AdManager $adManager */
         $adManager = $this->get('raafpage.adbundle.ad_manager');
-        $ads = $adManager->getAllAdsByUser($user);
+        $ads = $adManager->getAllLiveAdsByUser($user);
+        $images = $adManager->getDefaultImages($ads);
 
-        return array('ads' => $ads);
+        return array('ads' => $ads, 'images' => $images);
+    }
+
+    /**
+     * @Route("/seller/ad/delete/{id}", name = "ad_delete")
+     */
+    public function deleteAction(Property $property)
+    {
+        /** @var AdManager $adManager */
+        $adManager = $this->get('raafpage.adbundle.ad_manager');
+        $adManager->delete($property);
+
+        return $this->redirect($this->generateUrl('ad_list'));
     }
 
     /**
@@ -118,7 +131,9 @@ class AdController extends Controller
                 }
 
                 $property->setUser($user);
-
+                $adStatus = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Status')
+                    ->findOneBy(array('name' => 'live'));
+                $property->setStatus($adStatus);
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($property);
                 $manager->flush();

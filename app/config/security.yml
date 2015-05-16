@@ -33,7 +33,7 @@ security:
                 check_path: login_check
                 login_path: login
                 always_use_default_target_path: true
-                default_target_path: /seller/add/list
+                default_target_path: /seller/ad/list
             logout:
                 path:  /admin/logout
                 target: seller_home_page

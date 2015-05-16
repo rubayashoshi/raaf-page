@@ -118,6 +118,28 @@ class Property
      */
     private $rentPeriod = 'weekly';
 
+    /**
+     * @ORM\OneToOne(targetEntity="Status")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+     **/
+    private $status;
+
+    /**
+     * @return status
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param Status $status
+     */
+    public function setStatus(Status $status)
+    {
+        $this->status = $status;
+    }
+
     public function __construct()
     {
         $this->adTypes = new ArrayCollection();

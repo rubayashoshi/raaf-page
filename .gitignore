@@ -9,6 +9,7 @@
 /bin/
 /web/uploads/
 /web/bundles/
+/web/localAssets/
+/web/js
 /composer.phar
-/web/js/compiled/
 .idea

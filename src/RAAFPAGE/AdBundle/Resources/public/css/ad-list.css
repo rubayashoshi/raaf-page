@@ -1,0 +1,58 @@
+.add-container {
+    clear: both;
+}
+
+.add-container-body {
+    height: 150px;
+    width: 98%;
+    border: 1px solid gray;
+    padding: 5px 10px;
+    float: left;
+}
+
+.image-container {
+    width: 20%;
+    float: left;
+}
+
+.description-container {
+    width: 60%;
+    float: left;
+}
+
+.ad-title {
+    padding: 10px 5px;
+}
+
+.ad-location {
+    padding: 10px 5px;
+}
+
+.ad-price {
+    padding: 10px 5px;
+}
+
+.action-container {
+    width: 20%;
+    float: left;
+}
+
+.add-container-footer {
+    width: 20%;
+    float: left;
+}
+
+.action-container ul li {
+    height: 20%;
+    width: 80%;
+    background: gray;
+    margin-bottom: 1px;
+    padding: 5px;
+}
+
+.action-container ul li a:hover
+{
+    color: #800000;
+    background: transparent;
+    border-color: #aaab9c #fff #fff #ccc;
+}
