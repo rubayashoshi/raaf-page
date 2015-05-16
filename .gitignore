@@ -7,9 +7,6 @@
 /build/
 /vendor/
 /bin/
-/web/uploads/
-/web/bundles/
-/web/localAssets/
-/web/js
+/web/
 /composer.phar
 .idea

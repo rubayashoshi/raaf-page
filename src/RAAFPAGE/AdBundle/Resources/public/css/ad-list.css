@@ -1,7 +1,9 @@
 .add-container {
     clear: both;
 }
-
+#content {
+    min-height: 500px !important;
+}
 .add-container-body {
     height: 150px;
     width: 98%;
@@ -65,7 +67,10 @@
 .add-type {
     width: 100px;
     float: left;
-    padding: 5px 10px;
-    margin-left: 10px;
+    padding: 10px 0;
+    margin-right: 10px;
 }
 
+.active {
+    background-color: lightgray !important;
+}

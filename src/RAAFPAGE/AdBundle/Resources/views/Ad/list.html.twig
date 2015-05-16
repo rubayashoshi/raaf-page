@@ -5,19 +5,20 @@
     %}
     <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
     {% endstylesheets %}
+    <link href="{{ asset('bundles/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block page_content %}
     <div class="ad-type-filter">
         <div class="add-type">
-            {% if status != 'archived' %}<a href="{{ path('ad_list', {'status' : 'archived'}) }}">Archived ads</a>{% else %}Archived ads{% endif %}
+            {% if status != 'archived' %}<a class="btn btn-success btn-large" href="{{ path('ad_list', {'status' : 'archived'}) }}">Archived ads</a>{% else %}<p class="btn btn-success btn-large active">Archived ads</p>{% endif %}
             </div>
         <div class="add-type">
-            {% if status != 'live' %}<a href="{{ path('ad_list', {'status' : 'live'}) }}">Live ads</a>{% else %}Live ads{% endif %}
+            {% if status != 'live' %}<a class="btn btn-success btn-large" href="{{ path('ad_list', {'status' : 'live'}) }}">Live ads</a>{% else %}<p class="btn btn-success btn-large active">Live ads</p>{% endif %}
         </div>
     </div>
-    {% set total = 4 %}
-    You current have {{ total }} ads {{ status }}
+    {#{% set total = 4 %}#}
+    {#You current have {{ total }} ads {{ status }}#}
 
     {% for ad in ads %}
         <div class="add-container">
