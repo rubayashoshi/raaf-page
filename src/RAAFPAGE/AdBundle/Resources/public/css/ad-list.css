@@ -45,9 +45,10 @@
 .action-container ul li {
     height: 20%;
     width: 80%;
-    background: gray;
+    background: lightgray;
     margin-bottom: 1px;
     padding: 5px;
+    list-style: none;
 }
 
 .action-container ul li a:hover
@@ -56,3 +57,15 @@
     background: transparent;
     border-color: #aaab9c #fff #fff #ccc;
 }
+
+.ad-type-filter {
+    width: 300px;
+}
+
+.add-type {
+    width: 100px;
+    float: left;
+    padding: 5px 10px;
+    margin-left: 10px;
+}
+

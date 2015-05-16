@@ -197,6 +197,9 @@ class AdController extends Controller
                 }
 
                 $property->setUser($user);
+                $adStatus = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Status')
+                    ->findOneBy(array('name' => 'live'));
+                $property->setStatus($adStatus);
 
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($property);
