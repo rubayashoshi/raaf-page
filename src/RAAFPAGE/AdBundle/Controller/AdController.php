@@ -18,19 +18,19 @@ use Symfony\Component\HttpFoundation\Request;
 class AdController extends Controller
 {
     /**
-     * @Route("/seller/ad/list", name = "ad_list")
+     * @Route("/seller/ad/list/{status}", name = "ad_list")
      * @Template()
      */
-    public function listAction()
+    public function listAction($status =  'live')
     {
         $user = $this->get('security.context')->getToken()->getUser();
 
         /** @var AdManager $adManager */
         $adManager = $this->get('raafpage.adbundle.ad_manager');
-        $ads = $adManager->getAllLiveAdsByUser($user);
+        $ads = $adManager->getAllLiveAdsByUser($user, $status);
         $images = $adManager->getDefaultImages($ads);
 
-        return array('ads' => $ads, 'images' => $images);
+        return array('ads' => $ads, 'images' => $images, 'status' => $status);
     }
 
     /**

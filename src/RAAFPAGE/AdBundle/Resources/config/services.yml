@@ -9,6 +9,7 @@ services:
              - "@doctrine.orm.entity_manager"
              - "@raafpage.ad_bundle.file_uploader"
              - "@raafpage.ad_bundle.fetcher.status"
+             - "@security.context"
     raafpage.ad_bundle.file_manager:
         class: RAAFPAGE\AdBundle\Service\FileManager
         arguments:

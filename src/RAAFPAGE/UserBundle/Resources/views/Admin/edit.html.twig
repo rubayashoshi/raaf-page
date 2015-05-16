@@ -1,0 +1,32 @@
+{% extends 'RAAFPAGEAdBundle::layout.html.twig' %}
+
+{% block title %}RAAF PAGE{% endblock %}
+
+{% block page_css %}
+    {% stylesheets output="bundles/UserBundle/css/registration.css"
+    '@RAAFPAGEUserBundle/Resources/public/css/registration.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
+
+
+{% block page_content %}
+    <div id="register-page-container">
+    <div id="register-form-container">
+        <form id='register' action='' method='post' accept-charset='UTF-8'>
+            {{ form_errors(form) }}
+            {{ form_row( form.email, { 'label': 'Email address:', 'for': 'email' } ) }}
+
+            {{ form_errors( form.username ) }}
+            {{ form_row( form.username, { 'label': 'Username:', 'for': 'username' } ) }}
+
+            <div id="lower">
+                <input type="submit" value="Submit">
+            </div>
+
+            {{ form_rest( form ) }}
+        </form>
+    </div>
+    </div>
+{% endblock %}

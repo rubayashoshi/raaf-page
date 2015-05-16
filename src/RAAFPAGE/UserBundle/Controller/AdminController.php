@@ -3,6 +3,7 @@
 namespace RAAFPAGE\UserBundle\Controller;
 
 use RAAFPAGE\UserBundle\Entity\User;
+use RAAFPAGE\UserBundle\Form\Type\UserEditType;
 use RAAFPAGE\UserBundle\Form\Type\UserType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -64,7 +65,7 @@ class AdminController extends Controller
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                return $this->redirect($this->generateUrl('site_home_page'));
+                return $this->redirect($this->generateUrl('edit_profile',array('id' => $user->getId())));
             } else {
                 $errors = $form->getErrorsAsString();
             }
@@ -73,6 +74,50 @@ class AdminController extends Controller
         return $this->render(
             'RAAFPAGEUserBundle:Admin:register.html.twig',
             array('form' => $form->createView(), 'errors' => $errors)
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @param User $user
+     * @return RedirectResponse|Response
+     */
+    public function editAction(User $user, Request $request)
+    {
+        $form = $this->createForm(new UserEditType(), $user, array(
+            'action' => $this->generateUrl('add_account')
+        ));
+        $errors = false;
+
+        if ($_POST) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                /**
+                 * @var User $user
+                 */
+                $user = $form->getData();
+                $password = $user->getPassword();
+
+                // encode the password
+                $factory = $this->get('security.encoder_factory');
+                $encoder = $factory->getEncoder($user);
+                $encodedPassword = $encoder->encodePassword($password, $user->getSalt());
+                $user->setPassword($encodedPassword);
+
+                $user->setRole('ROLE_USER');
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $this->redirect($this->generateUrl('ad_list'));
+            } else {
+                $errors = $form->getErrorsAsString();
+            }
+        }
+        return $this->render(
+            'RAAFPAGEUserBundle:Admin:edit.html.twig',
+            array('form' => $form->createView(), 'errors' => $errors, 'user' => $user)
         );
     }
 }

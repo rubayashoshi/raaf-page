@@ -1,11 +1,29 @@
-{% extends 'RAAFPAGEUserBundle::layout.html.twig' %}
+{% extends '::base.html.twig' %}
+
+{% block layout_css %}
+    {% stylesheets output="bundles/UserBundle/css/screen.css"
+    '@RAAFPAGESiteBundle/Resources/public/css/site-home-page.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block menu_css %}
+    {% stylesheets output="bundles/UserBundle/css/menu.css"
+    '@RAAFPAGEUserBundle/Resources/public/css/menu.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
 
 {% block navigation %}
     <div id='cssmenu'>
         <ul>
-            <li><a href='#'>ACCOUNT DETAILS</a></li>
-            <li><a href='{{ path('') }}'>ALL ADS</a></li>
-            <li><a href='{{ path('logout') }}'>LOGOUT</a></li>
+            <li><a href="{{ path('edit_profile', {'id' : app.user.id}) }}">PROFILE</a></li>
+            <li><a href="{{ path('ad_list') }}">MANAGE ADS</a></li>
+            <li><a href="{{ path('add_ad') }}">POST AN ADD</a></li>
+            <li><a href='#'>HELP</a></li>
+        </ul>
         </ul>
     </div>
 {% endblock %}

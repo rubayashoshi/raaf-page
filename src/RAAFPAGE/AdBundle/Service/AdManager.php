@@ -53,11 +53,17 @@ class AdManager
 
     /**
      * @param User $user
+     * @param string $status
      * @return array
      */
-    public function getAllLiveAdsByUser(User $user)
+    public function getAllLiveAdsByUser(User $user, $status)
     {
-        return $this->getRepository()->findBy(array('user' => $user, 'status' => $this->statusFetcher->getStatusByName('live')));
+        return $this->getRepository()->findBy(
+            array(
+                'user' => $user,
+                'status' => $this->statusFetcher->getStatusByName($status)
+            )
+        );
     }
 
     /**

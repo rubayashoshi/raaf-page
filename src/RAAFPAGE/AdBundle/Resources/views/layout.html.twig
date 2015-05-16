@@ -28,9 +28,9 @@
 {% block navigation %}
     <div id='cssmenu'>
         <ul>
-            <li><a href='#'>PROFILE</a></li>
-            <li><a href='#'>MANAGE ADS</a></li>
-            <li><a href='#'>POST AN ADD</a></li>
+            <li><a href="{{ path('edit_profile', {'id' : app.user.id}) }}">PROFILE</a></li>
+            <li><a href="{{ path('ad_list') }}">MANAGE ADS</a></li>
+            <li><a href="{{ path('add_ad') }}">POST AN ADD</a></li>
             <li><a href='#'>HELP</a></li>
         </ul>
         </ul>

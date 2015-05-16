@@ -8,8 +8,16 @@
 {% endblock %}
 
 {% block page_content %}
+    <div class="ad-type-filter">
+        <div class="add-type">
+            {% if status != 'archived' %}<a href="{{ path('ad_list', {'status' : 'archived'}) }}">Archived ads</a>{% else %}Archived ads{% endif %}
+            </div>
+        <div class="add-type">
+            {% if status != 'live' %}<a href="{{ path('ad_list', {'status' : 'live'}) }}">Live ads</a>{% else %}Live ads{% endif %}
+        </div>
+    </div>
     {% set total = 4 %}
-    You current have {{ total }} ads active
+    You current have {{ total }} ads {{ status }}
 
     {% for ad in ads %}
         <div class="add-container">

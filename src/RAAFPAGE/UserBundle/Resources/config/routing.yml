@@ -8,8 +8,11 @@ seller_home_page:
 add_account:
     path:     /register
     defaults: { _controller: RAAFPAGEUserBundle:Admin:addAccount }
-
-
+edit_profile:
+    path:      /user/profile/{id}
+    defaults:  { _controller: RAAFPAGEUserBundle:Admin:edit }
+    requirements:
+        id:  \d+
 login:
     path:     /login
     defaults: { _controller: RAAFPAGEUserBundle:Security:login }
