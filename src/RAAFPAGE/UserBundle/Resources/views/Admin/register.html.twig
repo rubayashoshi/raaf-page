@@ -1,4 +1,4 @@
-{% extends 'RAAFPAGEUserBundle::layout.html.twig' %}
+{% extends 'RAAFPAGEUserBundle::seller.html.twig' %}
 
 {% block title %}RAAF PAGE{% endblock %}
 
@@ -9,28 +9,6 @@
     <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
     {% endstylesheets %}
 {% endblock %}
-{#{% block content %}#}
-    {#{% block page_content %}#}
-        {#<div id="login-page-container">#}
-            {#<div id="login-form-container">#}
-                {#{% if error %}#}
-                    {#<div id="error-message">{{ error.message }}</div>#}
-                {#{% endif %}#}
-
-                {#<form action="{{ path('login_check') }}" method="post">#}
-                    {#<label for="username">Username:</label>#}
-                    {#<input type="text" id="username" name="_username">#}
-                    {#<label for="password">Password:</label>#}
-                    {#<p><a href="#">Forgot your password?</a></p>#}
-                    {#<input type="password" id="password" name="_password">#}
-                    {#<div id="lower">#}
-                        {#<input type="checkbox"><label class="check" for="checkbox">Keep me logged in</label>#}
-                        {#<input type="submit" value="Login">#}
-                    {#</div>#}
-                {#</form>#}
-            {#</div>#}
-        {#</div>#}
-    {#{% endblock %}#}
 
 {% block content %}
     <div id="register-page-container">

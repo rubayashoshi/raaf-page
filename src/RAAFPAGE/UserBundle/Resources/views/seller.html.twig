@@ -19,10 +19,12 @@
 {% block navigation %}
     <div id='cssmenu'>
         <ul>
+            {% if app.user %}
             <li><a href="{{ path('edit_profile', {'id' : app.user.id}) }}">PROFILE</a></li>
             <li><a href="{{ path('ad_list') }}">MANAGE ADS</a></li>
             <li><a href="{{ path('add_ad') }}">POST AN ADD</a></li>
             <li><a href='#'>HELP</a></li>
+            {% endif %}
         </ul>
         </ul>
     </div>

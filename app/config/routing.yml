@@ -8,12 +8,16 @@ raafpage_ad:
     prefix:   /
 
 RAAFPAGE_user:
-    resource: "@RAAFPAGEUserBundle/Resources/config/routing.yml"
+    resource: "@RAAFPAGEUserBundle/Controller/"
+    type:     annotation
     prefix:   /
 
-RAAFPAGE_user:
-    resource: "@RAAFPAGEFileManagerBundle/Resources/config/routing.yml"
-    prefix:   secured/document/
 post:
     resource: "@RAAFPAGEFileManagerBundle/Controller/TopicController.php"
     type:     annotation
+
+login_check:
+    pattern:   /admin/login_check
+
+logout:
+    pattern:    /admin/logout

@@ -17,5 +17,5 @@ _main:
 #_acme_demo:
 #    resource: "@AcmeDemoBundle/Resources/config/routing.yml"
 
-_user_bundle:
-    resource: "@RAAFPAGEUserBundle/Resources/config/routing.yml"
+#_user_bundle:
+#    resource: "@RAAFPAGEUserBundle/Resources/config/routing.yml"

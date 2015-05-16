@@ -6,6 +6,7 @@ use RAAFPAGE\UserBundle\Entity\User;
 use RAAFPAGE\UserBundle\Form\Type\UserEditType;
 use RAAFPAGE\UserBundle\Form\Type\UserType;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ class AdminController extends Controller
 {
     /**
      * Company admin home page
+     * @Route("/admin", name = "admin_home_page")
      * @return Response
      */
     public function homeAction()
@@ -24,6 +26,7 @@ class AdminController extends Controller
 
     /**
      * Seller home page
+     * @Route("/seller", name = "seller_home_page")
      * @return Response
      */
     public function sellerAction()
@@ -33,6 +36,7 @@ class AdminController extends Controller
 
     /**
      * @param Request $request
+     * @Route("/register", name = "add_account")
      * @return RedirectResponse|Response
      */
     public function addAccountAction(Request $request)
@@ -80,6 +84,7 @@ class AdminController extends Controller
     /**
      * @param Request $request
      * @param User $user
+     * @Route("/user/profile/{id}", name = "edit_profile")
      * @return RedirectResponse|Response
      */
     public function editAction(User $user, Request $request)
