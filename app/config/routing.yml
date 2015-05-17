@@ -1,5 +1,5 @@
 raafpage_site:
-    resource: "@RAAFPAGESiteBundle/Resources/config/routing.yml"
+    resource: "@RAAFPAGESiteBundle/Controller/"
     prefix:   /
 
 raafpage_ad:

@@ -7,7 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Category
  * @package RAAFPAGE\AdBundle\Entity
- * @ORM\entity('sub_category')
+ * @ORM\Table(name="sub_category")
+ * @ORM\entity(repositoryClass="RAAFPAGE\AdBundle\Entity\SubCategoryRepository")
  */
 class SubCategory
 {

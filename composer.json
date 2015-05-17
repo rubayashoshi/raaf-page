@@ -25,7 +25,8 @@
         "doctrine/doctrine-fixtures-bundle": "2.2.*",
         "jms/security-extra-bundle": "dev-master",
         "braincrafted/bootstrap-bundle": "dev-master",
-        "twbs/bootstrap": "~3.3"
+        "twbs/bootstrap": "~3.3",
+        "knplabs/knp-menu-bundle": "~2"
     },
     "scripts": {
         "post-install-cmd": [
