@@ -17,14 +17,17 @@ class Version20150517115434 extends AbstractMigration
             'Migration can only be executed safely on \'mysql\'.'
         );
 
+        $this->addSql('CREATE TABLE `category` (`id` INT AUTO_INCREMENT NOT NULL, `name` VARCHAR(255) NOT NULL, ' .
+            '`display` VARCHAR(255) NOT NULL, `slug` VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE ' .
+            'utf8_unicode_ci ENGINE = InnoDB');
+
         $this->addSql('CREATE TABLE sub_category (id INT AUTO_INCREMENT NOT NULL, category_id INT NOT NULL, ' .
             'parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, display VARCHAR(255) NOT NULL, ' .
-            'PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE `category` (`id` INT AUTO_INCREMENT NOT NULL, `name` VARCHAR(255) NOT NULL, ' .
-            '`display` VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE ' .
-            'utf8_unicode_ci ENGINE = InnoDB');
+            'slug VARCHAR(255) NOT NULL, depth INT DEFAULT 0, UNIQUE KEY `unique_slug` (`slug`) COMMENT "Slug should be unque", PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+
         $this->addSql('ALTER TABLE `sub_category` ADD CONSTRAINT FK_723649C912469DE2 FOREIGN KEY ' .
             '(category_id) REFERENCES category (id)');
+
         $this->addSql('ALTER TABLE `sub_category` ADD CONSTRAINT FK_723649C9727ACA70 FOREIGN KEY (`parent_id`) ' .
             'REFERENCES sub_category (id)');
     }

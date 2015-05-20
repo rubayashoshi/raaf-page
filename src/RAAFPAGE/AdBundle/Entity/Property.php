@@ -125,6 +125,29 @@ class Property
     private $status;
 
     /**
+     *
+     * @ORM\ManyToOne(targetEntity="\RAAFPAGE\AdBundle\Entity\SubCategory")
+     * @ORM\JoinColumn(name="subcategory_id", referencedColumnName="id")
+     **/
+    private $subCategory;
+
+    /**
+     * @return SubCategory
+     */
+    public function getSubCategory()
+    {
+        return $this->subCategory;
+    }
+
+    /**
+     * @param SubCategory $subCategory
+     */
+    public function setSubCategory(SubCategory $subCategory)
+    {
+        $this->subCategory = $subCategory;
+    }
+
+    /**
      * @return status
      */
     public function getStatus()

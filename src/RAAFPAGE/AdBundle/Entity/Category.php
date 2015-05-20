@@ -30,6 +30,11 @@ class Category
     protected $display;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    protected $slug;
+
+    /**
      * @return int
      */
     public function getId()
@@ -75,5 +80,21 @@ class Category
     public function setDisplay($display)
     {
         $this->display = $display;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     }
 }

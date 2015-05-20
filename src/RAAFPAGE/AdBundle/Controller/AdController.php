@@ -95,6 +95,14 @@ class AdController extends Controller
     }
 
     /**
+     * @Route("/postanad", name="post-an-ad")
+     */
+    public function postAnAdd()
+    {
+        return $this->render('RAAFPAGEAdBundle:Ad:postanad.html.twig');
+    }
+
+    /**
      * @Route("/seller/ad/edit/{id}", name="edit_add")
      * @Template()
      */

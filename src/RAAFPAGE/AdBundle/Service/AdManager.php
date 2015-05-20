@@ -60,10 +60,23 @@ class AdManager
     {
         return $this->getRepository()->findBy(
             array(
-                'user' => $user,
+                'subCategory' => $user,
                 'status' => $this->statusFetcher->getStatusByName($status)
             )
         );
+    }
+
+    /**
+     * @param int $subCategoryId
+     * @return array
+     */
+    public function getAllLiveAdsBySubCategoryId($subCategoryId)
+    {
+        $subCategory = $this->entityManager->getRepository('RAAFPAGEAdBundle:SubCategory')->findBy(array('slug' => $subCategoryId));
+
+        $ads = $this->getRepository()->findBy(array('subCategory' => $subCategory));
+
+        return $ads;
     }
 
     /**

@@ -20,6 +20,7 @@
                 <a href="{{ path('raafpage_site_homepage') }}">RAAF PAGE</a>
             </div>
             <div class="header-right">
+                <div id="post-an-add"><a href="{{ path('post-an-ad') }}">Post An Ad</a></div>
                 {% if app.user %}
                     <a href="{{path('logout')}}">LOGOUT</a>
                 {% else %}
