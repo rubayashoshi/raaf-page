@@ -6,6 +6,7 @@ use RAAFPAGE\UserBundle\Entity\User;
 use RAAFPAGE\UserBundle\Form\Type\UserEditType;
 use RAAFPAGE\UserBundle\Form\Type\UserType;
 
+use RAAFPAGE\UserBundle\Service\UserManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -35,6 +36,7 @@ class AdminController extends Controller
     }
 
     /**
+     * /**
      * @param Request $request
      * @Route("/register", name = "add_account")
      * @return RedirectResponse|Response
@@ -49,25 +51,12 @@ class AdminController extends Controller
         ));
 
         if ($_POST) {
-            $entityManager = $this->getDoctrine()->getManager();
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                /**
-                 * @var User $user
-                 */
-                $user = $form->getData();
-                $password = $user->getPassword();
-
-                // encode the password
-                $factory = $this->get('security.encoder_factory');
-                $encoder = $factory->getEncoder($user);
-                $encodedPassword = $encoder->encodePassword($password, $user->getSalt());
-                $user->setPassword($encodedPassword);
-
-                $user->setRole('ROLE_USER');
-                $entityManager->persist($user);
-                $entityManager->flush();
+                /** @var UserManager $userManager */
+                $userManager = $this->get('raaf_page.user_bundle.user_manager');
+                $userManager->handleUserRegistration($form->getData());
 
                 return $this->redirect($this->generateUrl('edit_profile',array('id' => $user->getId())));
             } else {
@@ -79,6 +68,17 @@ class AdminController extends Controller
             'RAAFPAGEUserBundle:Admin:register.html.twig',
             array('form' => $form->createView(), 'errors' => $errors)
         );
+    }
+
+    /**
+     * @Route("/activate-account/{id}", name="activate_user_account")
+     */
+    public function activateAccountAction($id)
+    {
+        $userManager = $this->get('raaf_page.user_bundle.user_manager');
+        $userManager->activateAccount($id);
+
+        return $this->render('RAAFPAGEUserBundle:Email:activation.confirmation.html.twig');
     }
 
     /**

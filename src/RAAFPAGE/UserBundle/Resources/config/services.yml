@@ -2,6 +2,14 @@ parameters:
 #    RAAFPAGE_user.example.class: RAAFPAGE\UserBundle\Example
 
 services:
-#    RAAFPAGE_user.example:
-#        class: %RAAFPAGE_user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    raaf_page.user_bundle.user_manager:
+        class: RAAFPAGE\UserBundle\Service\UserManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @security.encoder_factory
+            - @user_bundle.service.mail_sender
+    user_bundle.service.mail_sender:
+        class: RAAFPAGE\UserBundle\Service\MailSender
+        arguments:
+            - @service_container
+            - @router

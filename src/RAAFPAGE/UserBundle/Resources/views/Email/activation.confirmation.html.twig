@@ -1,0 +1,18 @@
+{% extends 'RAAFPAGEUserBundle::seller.html.twig' %}
+
+{% block page_css %}
+    {% stylesheets output="bundles/UserBundle/css/login.css"
+    '@RAAFPAGEUserBundle/Resources/public/css/login.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+{% endblock %}
+{% block content %}
+    {% block page_content %}
+        <div id="login-page-container">
+            <div id="login-form-container">
+                Your account activation is completed. Please click on <a href="{{ path('login') }}">login</a> to login
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}
