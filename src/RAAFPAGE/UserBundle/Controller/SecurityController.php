@@ -5,11 +5,13 @@ namespace RAAFPAGE\UserBundle\Controller;
 use RAAFPAGE\UserBundle\Entity\User;
 use RAAFPAGE\UserBundle\Form\Type\UserEditType;
 use RAAFPAGE\UserBundle\Form\Type\UserType;
+use RAAFPAGE\UserBundle\Service\UserManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\SecurityContext;
 
@@ -69,17 +71,21 @@ class SecurityController extends Controller
 
         if ($_POST) {
             $form->handleRequest($request);
-
             if ($form->isValid()) {
                 /** @var UserManager $userManager */
                 $userManager = $this->get('raaf_page.user_bundle.user_manager');
-                $userManager->handleUserRegistration($form->getData());
 
-                $registrationSuccessMessage = 'Your singup is completed, Please check your email and ' .
-                    'click on the link to activate account';
-                //return $this->redirect($this->generateUrl('edit_profile',array('id' => $user->getId())));
+                if (! $userManager->checkUserAlreadyExists($form->getData())) {
+                    $errors = $userManager->checkUserAlreadyExists($form->getData());
+                    $userManager->handleUserRegistration($form->getData());
+                    $registrationSuccessMessage = 'Your sign-up is completed, Please check your email and ' .
+                        'click on the link to activate account';
+                    //return $this->redirect($this->generateUrl('edit_profile',array('id' => $user->getId())));
+                } else {
+                    $error = 'The username/email is already exists';
+                }
             } else {
-                $errors = $form->getErrorsAsString();
+                $error = $form->getErrorsAsString();
             }
         }
 
@@ -87,7 +93,7 @@ class SecurityController extends Controller
             'RAAFPAGEUserBundle:Admin:register.html.twig',
             array(
                 'form' => $form->createView(),
-                'errors' => $errors,
+                'error' => $error,
                 'registrationSuccessMessage' => $registrationSuccessMessage
             )
         );
@@ -160,8 +166,9 @@ class SecurityController extends Controller
                  * @var User $user
                  */
                 $user = $form->getData();
+                /*
+                 * //todo password changed should be part of separate submit
                 $password = $user->getPassword();
-
                 // encode the password
                 $factory = $this->get('security.encoder_factory');
                 $encoder = $factory->getEncoder($user);
@@ -169,6 +176,7 @@ class SecurityController extends Controller
                 $user->setPassword($encodedPassword);
 
                 $user->setRole('ROLE_USER');
+                */
                 $entityManager->persist($user);
                 $entityManager->flush();
 

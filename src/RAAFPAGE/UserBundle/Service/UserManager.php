@@ -78,4 +78,18 @@ class UserManager
             throw new ConflictHttpException('Oops!, user not found');
         }
     }
+
+    /**
+     * @param User $user
+     * @return boolean
+     */
+    public function checkUserAlreadyExists(User $user)
+    {
+        $query = $this->entityManager->createQuery("SELECT u FROM RAAFPAGE\UserBundle\Entity\User u WHERE u.email = :email OR u.username = :username");
+        $query->setParameter('email', $user->getEmail());
+        $query->setParameter('username', $user->getUsername());
+        $user = $query->getOneOrNullResult();
+
+        return ($user) ? true : false;
+    }
 }

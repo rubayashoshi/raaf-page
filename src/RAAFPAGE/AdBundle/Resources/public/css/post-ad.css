@@ -1,0 +1,32 @@
+#post-ad-container {
+    width: 99%;
+    padding: 10px;
+    border: 1px solid gray;
+    float: left;
+}
+
+.section-container {
+    width: 24%;
+    border: 1px solid gray;
+    float: left;
+    margin-right: 2px;
+}
+
+.list-item {
+    min-height: 20px;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+}
+
+.list-item:last-child {
+    border-bottom: none !important;
+}
+
+.hide {
+    display: none
+}
+.active {
+    background-color: #008000;
+    color: #FFF;
+}

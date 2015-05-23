@@ -1,10 +1,85 @@
-{% extends 'RAAFPAGEUserBundle::layout.html.twig' %}
+{% extends 'RAAFPAGEAdBundle::layout.html.twig' %}
+{% block page_css %}
+    {% block javascripts %}
+        {% javascripts output='js/compiled/post-ad.js'
+        '@RAAFPAGEAdBundle/Resources/public/js/fileUploader/jquery-1.10.2.min.js'
+        '@RAAFPAGEAdBundle/Resources/public/js/fileUploader/post-ad.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock %}
 
-{% block title %}RaafPage - Welcome to Raaf page{% endblock %}
-{% block content %}
-    <div class="site-home-page">
-        <div class="home-page-right">
+    {% stylesheets output="bundles/adBundle/css/post-ad.css"
+    '@RAAFPAGEAdBundle/Resources/public/css/post-ad.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet">
+    {% endstylesheets %}
+    <link href="{{ asset('bundles/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"/>
+{% endblock %}
 
+{% block page_content %}
+    <div id="post-ad-container">
+        <div class="section-container">
+            <div class="list-item category" id="property">Property</div>
+            <div class="list-item category" id="jobs">Jobs</div>
+            <div class="list-item category" id="electronics">Electronics</div>
         </div>
+
+        <!-- level 1 -->
+        <div class="section-container sub-category hide" id="property-content">
+            <div class="list-item subcategory" id="sub-category-1">To Rent</div>
+            <div class="list-item subcategory" id="sub-category-2">To Share</div>
+            <div class="list-item subcategory" id="sub-category-3">For Sale</div>
+        </div>
+        <div class="section-container sub-category hide" id="jobs-content">
+            <div class="list-item subcategory" id="sub-category-5">Telecommunication</div>
+            <div class="list-item subcategory" id="sub-category-6">Software Development</div>
+            <div class="list-item subcategory" id="sub-category-7">IT Support</div>
+        </div>
+
+        <div class="section-container sub-category hide" id="electronics-content">
+            <div class="list-item">Computers and others hardware</div>
+            <div class="list-item">Microwaves, Dishwasher and other kitchen stuffs</div>
+            <div class="list-item">Mobile and others</div>
+        </div>
+        <!-- level 1 end -->
+
+        <!-- level 2 -->
+        <div class="section-container hide subcategory-container" id="sub-category-1-content">
+            <div class="list-item subsubcategory" id="sub-sub-category-1">Offer rent</div>
+            <div class="list-item subsubcategory" id="sub-sub-category-2">Wanted</div>
+        </div>
+        <div class="section-container hide subcategory-container" id="sub-category-2-content">
+            <div class="list-item subsubcategory" id="sub-sub-category-3">Offer share</div>
+            <div class="list-item subsubcategory" id="sub-sub-category-4">Wanted</div>
+        </div>
+        <div class="section-container hide subcategory-container" id="sub-category-3-content">
+            <div class="list-item subsubcategory" id="sub-sub-category-5">Offer sale</div>
+            <div class="list-item subsubcategory" id="sub-sub-category-6">Wanted</div>
+        </div>
+        <!-- level 2 end-->
+
+        <!-- level 3 -->
+        <div class="section-container hide ads" id="sub-sub-category-1-content">
+            <div class="list-item">Studio Flats rent offered</div>
+            <div class="list-item">1 bedrooms</div>
+            <div class="list-item">2 bedrooms</div>
+            <div class="list-item">3 bedrooms</div>
+            <div class="list-item">4 bedrooms</div>
+            <div class="list-item">5 bedrooms</div>
+            <div class="list-item">5+ bedrooms</div>
+        </div>
+
+        <div class="section-container hide ads" id="sub-sub-category-2-content">
+            <div class="list-item">Studio Flats rent wanted</div>
+            <div class="list-item">1 bedrooms</div>
+            <div class="list-item">2 bedrooms</div>
+            <div class="list-item">3 bedrooms</div>
+            <div class="list-item">4 bedrooms</div>
+            <div class="list-item">5 bedrooms</div>
+            <div class="list-item">5+ bedrooms</div>
+        </div>
+        <!-- level 3 end-->
     </div>
+
 {% endblock %}

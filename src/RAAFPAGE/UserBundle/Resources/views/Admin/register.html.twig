@@ -17,9 +17,9 @@
                 {{ registrationSuccessMessage }}
             {% else %}
                 <form id='register' action='' method='post' accept-charset='UTF-8'>
-                    {#{% if error %}#}
-                    {#<div id="error-message">{{ error.message }}</div>#}
-                    {#{% endif %}#}
+                    {% if error %}
+                        <div id="error-message">{{ error }}</div>
+                    {% endif %}
 
                     {{ form_errors(form) }}
                     {{ form_row( form.email, { 'label': 'Email address:', 'for': 'email' } ) }}

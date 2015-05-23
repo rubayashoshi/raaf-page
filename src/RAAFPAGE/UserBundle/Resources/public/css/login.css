@@ -4,25 +4,17 @@
     padding: 20px 0;
 }
 
-/*#login-form-container {*/
-    /*margin: 0 auto;*/
-    /*width: 400px;*/
-/*}*/
 #error-message {
     padding: 10px;
 }
 
 #login-form-container {
+    min-height: 100px;
+    min-width: 200px;
+    padding: 10px 20px;
     margin: 0 auto;
     width: 400px;
     margin-top: 50px;
-    /*position: fixed;*/
-    /*width: 340px;*/
-    /*height: 280px;*/
-    /*top: 50%;*/
-    /*left: 50%;*/
-    /*margin-top: -140px;*/
-    /*margin-left: -170px;*/
     background: #fff;
     border-radius: 3px;
     border: 1px solid #ccc;

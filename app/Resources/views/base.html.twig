@@ -22,7 +22,7 @@
             <div class="header-right">
                 <div id="post-an-add"><a href="{{ path('post-an-ad') }}">Post An Ad</a></div>
                 {% if app.user %}
-                    <a href="{{path('logout')}}">LOGOUT</a>
+                    <a href="{{path('logout')}}">Logout</a>
                 {% else %}
                     <a href="{{ path('login') }}">Customer login</a>
                 {% endif %}

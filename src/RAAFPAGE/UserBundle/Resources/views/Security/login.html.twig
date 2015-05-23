@@ -25,9 +25,13 @@
                     <p><a href="#">Forgot your password?</a></p>
                     <input type="password" id="password" name="_password">
                     <div id="lower">
-                        <input type="checkbox"><label class="check" for="checkbox">Keep me logged in</label>
-                        <p> Not registered yet? <a href="{{ path('add_account') }}">Sign up?</a></p>
+                        <input type="checkbox">
+                        <label class="check" for="checkbox">Keep me logged in</label>
+                        {#<p style="float: left"> Not registered yet? <a href="{{ path('add_account') }}">Sign up?</a></p>#}
                         <input type="submit" value="Login">
+                    </div>
+                    <div id="lower">
+                        <p style="padding: 5px 10px;"> Not registered yet? <a href="{{ path('add_account') }}">Sign up?</a></p>
                     </div>
                 </form>
             </div>
