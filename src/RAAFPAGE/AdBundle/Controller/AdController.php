@@ -34,7 +34,7 @@ class AdController extends Controller
     /**
      * Display all ads in customer secured page
      *
-     * @Route("ad/list/{status}", name = "ad_list")
+     * @Route("/ad/list/{status}", name = "ad_list")
      * @Template()
      */
     public function listAction($status =  'live')

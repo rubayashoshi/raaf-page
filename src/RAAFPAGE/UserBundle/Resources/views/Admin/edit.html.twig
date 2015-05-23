@@ -21,6 +21,15 @@
             {{ form_errors( form.username ) }}
             {{ form_row( form.username, { 'label': 'Username:', 'for': 'username' } ) }}
 
+            {{ form_errors( form.firstName ) }}
+            {{ form_row( form.firstName, { 'label': 'First name:', 'for': 'firstname' } ) }}
+
+            {{ form_errors( form.lastName ) }}
+            {{ form_row( form.lastName, { 'label': 'Last name:', 'for': 'lastname' } ) }}
+
+            {{ form_errors( form.mobileNumber ) }}
+            {{ form_row( form.mobileNumber, { 'label': 'Mobile number:', 'for': 'mobilenumber' } ) }}
+
             <div id="lower">
                 <input type="submit" value="Submit">
             </div>

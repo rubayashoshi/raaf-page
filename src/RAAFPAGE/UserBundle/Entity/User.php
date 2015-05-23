@@ -44,6 +44,21 @@ class User implements AdvancedUserInterface, \Serializable
     private $email;
 
     /**
+     * @ORM\Column(name="first_name", type="string", length=60, unique=true)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(name="last_name", type="string", length=60, unique=true)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(name="mobile_name", type="string", length=60, unique=true)
+     */
+    private $mobileNumber;
+
+    /**
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
@@ -164,6 +179,64 @@ class User implements AdvancedUserInterface, \Serializable
     public function getEmail()
     {
         return $this->email;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     * @return User
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $lastName
+     * @return User
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileNumber()
+    {
+        return $this->mobileNumber;
+    }
+
+    /**
+     * @param integer $mobileNumber
+     * @return User
+     */
+    public function setMobileNumber($mobileNumber)
+    {
+        $this->mobileNumber = $mobileNumber;
+
+        return $this;
     }
 
     /**

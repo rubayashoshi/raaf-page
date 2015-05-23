@@ -3,7 +3,9 @@
 namespace RAAFPAGE\UserBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityNotFoundException;
 use RAAFPAGE\UserBundle\Entity\User;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 
 class UserManager
@@ -56,6 +58,7 @@ class UserManager
 
     /**
      * @param integer $id
+     * @throws ConflictHttpException
      */
     public function activateAccount($id)
     {
@@ -63,10 +66,16 @@ class UserManager
 
         /** @var User $user */
         $user = $this->entityManager->getRepository('RAAFPAGEUserBundle:User')->find($userId);
-        $user->setActive(true);
-        $user->setActivationTime(new \DateTime('NOW'));
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush($user);
+        if ($user instanceof User) {
+            $user->setActive(true);
+            $user->setActivationTime(new \DateTime('NOW'));
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush($user);
+
+        } else {
+            throw new ConflictHttpException('Oops!, user not found');
+        }
     }
 }

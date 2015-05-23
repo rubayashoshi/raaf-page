@@ -4,6 +4,7 @@ namespace RAAFPAGE\UserBundle\Controller;
 
 use RAAFPAGE\UserBundle\Entity\User;
 use RAAFPAGE\UserBundle\Form\Type\UserEditType;
+use RAAFPAGE\UserBundle\Form\Type\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -60,6 +61,7 @@ class SecurityController extends Controller
     {
         $user = new User();
         $errors = null;
+        $registrationSuccessMessage = false;
 
         $form = $this->createForm(new UserType(), $user, array(
             'action' => $this->generateUrl('add_account')
@@ -73,7 +75,9 @@ class SecurityController extends Controller
                 $userManager = $this->get('raaf_page.user_bundle.user_manager');
                 $userManager->handleUserRegistration($form->getData());
 
-                return $this->redirect($this->generateUrl('edit_profile',array('id' => $user->getId())));
+                $registrationSuccessMessage = 'Your singup is completed, Please check your email and ' .
+                    'click on the link to activate account';
+                //return $this->redirect($this->generateUrl('edit_profile',array('id' => $user->getId())));
             } else {
                 $errors = $form->getErrorsAsString();
             }
@@ -81,7 +85,11 @@ class SecurityController extends Controller
 
         return $this->render(
             'RAAFPAGEUserBundle:Admin:register.html.twig',
-            array('form' => $form->createView(), 'errors' => $errors)
+            array(
+                'form' => $form->createView(),
+                'errors' => $errors,
+                'registrationSuccessMessage' => $registrationSuccessMessage
+            )
         );
     }
 

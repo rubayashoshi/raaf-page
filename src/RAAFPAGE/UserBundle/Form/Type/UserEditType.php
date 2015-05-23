@@ -15,6 +15,9 @@ class UserEditType extends AbstractType
     {
         $builder->add('email', 'email');
         $builder->add('username', 'text');
+        $builder->add('firstName', 'text');
+        $builder->add('lastName', 'text');
+        $builder->add('mobileNumber', 'text');
     }
 
     /**

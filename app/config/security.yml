@@ -36,7 +36,7 @@ security:
                 default_target_path: /seller/ad/list
             logout:
                 path:  /admin/logout
-                target: seller_home_page
+                target: raafpage_site_homepage
             #anonymous: ~
             #http_basic:
             #    realm: "Secured Demo Area"

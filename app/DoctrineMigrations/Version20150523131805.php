@@ -5,10 +5,7 @@ namespace Application\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
-class Version20150523125645 extends AbstractMigration
+class Version20150523131805 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -20,9 +17,8 @@ class Version20150523125645 extends AbstractMigration
             'Migration can only be executed safely on \'mysql\'.'
         );
 
-        $this->addSql(
-            'ALTER TABLE users ADD activation_request_sent DATETIME DEFAULT NULL, ' .
-            'ADD activation_time DATETIME DEFAULT NULL'
+        $this->addSql('ALTER TABLE users ADD first_name VARCHAR(60) DEFAULT NULL, ADD last_name VARCHAR(60) DEFAULT NULL, ' .
+            'ADD mobile_name VARCHAR(60) DEFAULT NULL'
         );
     }
 
@@ -36,6 +32,6 @@ class Version20150523125645 extends AbstractMigration
             'Migration can only be executed safely on \'mysql\'.'
         );
 
-        $this->addSql('ALTER TABLE users DROP activation_request_sent, DROP activation_time');
+        $this->addSql('ALTER TABLE users DROP first_name, DROP last_name, DROP mobile_name');
     }
 }

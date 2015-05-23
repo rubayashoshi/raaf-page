@@ -13,26 +13,30 @@
 {% block content %}
     <div id="register-page-container">
         <div id="register-form-container">
-            <form id='register' action='' method='post' accept-charset='UTF-8'>
-                {#{% if error %}#}
+            {% if registrationSuccessMessage %}
+                {{ registrationSuccessMessage }}
+            {% else %}
+                <form id='register' action='' method='post' accept-charset='UTF-8'>
+                    {#{% if error %}#}
                     {#<div id="error-message">{{ error.message }}</div>#}
-                {#{% endif %}#}
+                    {#{% endif %}#}
 
-                {{ form_errors(form) }}
-                {{ form_row( form.email, { 'label': 'Email address:', 'for': 'email' } ) }}
+                    {{ form_errors(form) }}
+                    {{ form_row( form.email, { 'label': 'Email address:', 'for': 'email' } ) }}
 
-                {{ form_errors( form.username ) }}
-                {{ form_row( form.username, { 'label': 'Username:', 'for': 'username' } ) }}
+                    {{ form_errors( form.username ) }}
+                    {{ form_row( form.username, { 'label': 'Username:', 'for': 'username' } ) }}
 
-                {{ form_errors( form.password ) }}
-                {{ form_row( form.password.first, { 'label': 'Your password:', 'for': 'password' } ) }}
-                {{ form_row( form.password.second, { 'label': 'Repeat Password:', 'for': 'Repeat password' } ) }}
-                <div id="lower">
-                    <input type="submit" value="Submit">
-                </div>
+                    {{ form_errors( form.password ) }}
+                    {{ form_row( form.password.first, { 'label': 'Your password:', 'for': 'password' } ) }}
+                    {{ form_row( form.password.second, { 'label': 'Repeat Password:', 'for': 'Repeat password' } ) }}
+                    <div id="lower">
+                        <input type="submit" value="Submit">
+                    </div>
 
-                {{ form_rest( form ) }}
-            </form>
+                    {{ form_rest( form ) }}
+                </form>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
