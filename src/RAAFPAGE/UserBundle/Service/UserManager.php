@@ -64,6 +64,7 @@ class UserManager
         /** @var User $user */
         $user = $this->entityManager->getRepository('RAAFPAGEUserBundle:User')->find($userId);
         $user->setActive(true);
+        $user->setActivationTime(new \DateTime('NOW'));
 
         $this->entityManager->persist($user);
         $this->entityManager->flush($user);

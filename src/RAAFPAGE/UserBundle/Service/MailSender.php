@@ -45,10 +45,11 @@ class MailSender
         );
 
         $message = \Swift_Message::newInstance()
-            ->setSubject('User registration confirmation')
+            ->setSubject('User registration activation request')
             ->setTo($user->getEmail())
-            ->setFrom('rubayashoshi@gmail.com')
-            ->setBody($content, 'text/html');
+            ->setFrom($this->container->getParameter('mailer_user'))
+            ->setBody($content);
+
         $mailer = $this->container->get('mailer');
         $mailer->send($message);
     }

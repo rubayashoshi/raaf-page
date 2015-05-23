@@ -13,6 +13,9 @@
             <div id="login-form-container">
                 {% if error %}
                     <div id="error-message">{{ error.message }}</div>
+                    {% if showActivationLink is defined %}
+                        <a href="{{ path('account_activation_request') }}">Request account activation</a>
+                    {% endif %}
                 {% endif %}
 
                 <form action="{{ path('login_check') }}" method="post">

@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\SecurityContext;
 
 class SecurityController extends Controller
@@ -21,6 +22,7 @@ class SecurityController extends Controller
      */
     public function loginAction()
     {
+        $showActivationLink = false;
         $request = $this->getRequest();
         $session = $request->getSession();
 
@@ -32,10 +34,15 @@ class SecurityController extends Controller
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         }
 
+        if ($error instanceof DisabledException) {
+            $showActivationLink = true;
+        }
+
         return $this->render('RAAFPAGEUserBundle:Security:login.html.twig',
             array(
                 'last_username' => $session->get(SecurityContext::LAST_USERNAME),
-                'error' => $error
+                'error' => $error,
+                'showActivationLink' => $showActivationLink
             )
         );
     }
@@ -75,6 +82,36 @@ class SecurityController extends Controller
         return $this->render(
             'RAAFPAGEUserBundle:Admin:register.html.twig',
             array('form' => $form->createView(), 'errors' => $errors)
+        );
+    }
+
+    /**
+     * Activate user account
+     *
+     * @Route("/account-activation-request", name="account_activation_request")
+     */
+    public function accountActivationRequestAction()
+    {
+        $status = false;
+        $error = false;
+
+        if (isset($_POST['email'])) {
+            $email = $_POST['email'];
+            $user = $this->getDoctrine()->getRepository('RAAFPAGEUserBundle:User')
+                ->findOneBy(array('email' => $email));
+
+            if ($user instanceof User) {
+                $mailSender = $this->get('user_bundle.service.mail_sender');
+                $user->setActivationEmailSent(new \DateTime('NOW'));
+                $mailSender->sendMail($user);
+                $status = 'success';
+            } else {
+                $error = 'This email is not registered with us';
+            }
+        }
+
+        return $this->render('RAAFPAGEUserBundle:Security:activation.request.html.twig',
+            array('status' => $status, 'error' => $error)
         );
     }
 

@@ -49,6 +49,18 @@ class User implements AdvancedUserInterface, \Serializable
     private $isActive;
 
     /**
+     * @var \Datetime
+     * @ORM\Column(name="activation_request_sent", type="datetime")
+     */
+    private $activationEmailSent;
+
+    /**
+     * @var \Datetime
+     * @ORM\Column(name="activation_time", type="datetime")
+     */
+    private $activationTime;
+
+    /**
      * @ORM\Column(type="string", length=20)
      */
     private $role;
@@ -225,6 +237,38 @@ class User implements AdvancedUserInterface, \Serializable
     public function setActive($active = false)
     {
         $this->isActive = $active;
+    }
+
+    /**
+     * @return \Datetime
+     */
+    public function getActivationEmailSent()
+    {
+        return $this->activationEmailSent;
+    }
+
+    /**
+     * @param \Datetime $activationEmailSent
+     */
+    public function setActivationEmailSent($activationEmailSent)
+    {
+        $this->activationEmailSent = $activationEmailSent;
+    }
+
+    /**
+     * @return \Datetime
+     */
+    public function getActivationTime()
+    {
+        return $this->activationTime;
+    }
+
+    /**
+     * @param \Datetime $activationTime
+     */
+    public function setActivationTime($activationTime)
+    {
+        $this->activationTime = $activationTime;
     }
 
     /**
