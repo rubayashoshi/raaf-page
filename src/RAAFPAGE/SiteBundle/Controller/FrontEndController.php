@@ -12,6 +12,7 @@ class FrontEndController extends Controller
 {
     /**
      * Home page of a particular category
+     *
      * @Route("/ads/{category}", name = "front_end_ad_category_list")
      * @param string $category
      * @return Response
@@ -22,8 +23,9 @@ class FrontEndController extends Controller
     }
 
     /**
-     * Sub category page
-     * @Route("/ads/s/{path}", name = "front_end_ad_sub_category_list")
+     * parent sub category page where all child sub category page can sit
+     *
+     * @Route("/ads/sub/{path}", name = "front_end_ad_sub_category_list")
      * @Template()
      * @param string $path
      * @return Response
@@ -38,14 +40,14 @@ class FrontEndController extends Controller
     }
 
     /**
-     * Sub category page
-     * @Route("/ads/s/{slug}", name = "front_end_ad_sub_category_list_with_size")
+     * Display all ads for the selected sub category
+     *
+     * @Route("/ads/property/{slug}", name = "front_end_ad_sub_category_list_with_size")
      * @param $slug
      * @return Response
      */
-    public function subCategorywithSizeAction($slug)
+    public function subCategoryWithSizeAction($slug)
     {
-        die('display all ads for this size');
         return $this->render('RAAFPAGESiteBundle:Default:home.html.twig');
     }
 }

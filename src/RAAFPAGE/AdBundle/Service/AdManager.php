@@ -118,8 +118,6 @@ class AdManager
      */
     public function delete(Property $property)
     {
-//        $adStatus = $this->entityManager->getRepository('RAAFPAGEAdBundle:Status')
-//            ->findOneBy(array('name' => 'archived'));
         $adStatus = $this->statusFetcher->getStatusByName('archived');
         $property->setStatus($adStatus);
 
