@@ -51,6 +51,19 @@ class SubCategoryRepository extends EntityRepository
         return $menu;
     }
 
+    /**
+     * @return array
+     */
+    public function getAllSubCategories()
+    {
+        $result = $this->getEntityManager()
+            ->createQuery("SELECT sc FROM RAAFPAGEAdBundle:SubCategory sc ORDER BY sc.id ASC")
+            ->getResult();
+
+        return $result;
+    }
+
+
     public function getById($id)
     {
         return $this->getEntityManager()->getRepository("RAAFPAGEAdBundle:SubCategory")->find($id);

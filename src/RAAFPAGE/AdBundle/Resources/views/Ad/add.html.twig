@@ -16,7 +16,7 @@
 
 
 {% block page_content %}
-    <form action="{{ path('add_ad') }}" class="form-upload-add" novalidate
+    <form action="{{ path('add_ad', {'id': id}) }}" class="form-upload-add" novalidate
         method="post" enctype="multipart/form-data" id="MyUploadForm">
         <div class="block-container">
             {% if error != '' %}

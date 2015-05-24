@@ -9,7 +9,7 @@ class CategoryRepository extends EntityRepository
     public function findAllCategories()
     {
         $result = $this->getEntityManager()
-            ->createQuery("SELECT c FROM RAAFPAGEAdBundle:Category c ORDER BY c.name ASC")
+            ->createQuery("SELECT c FROM RAAFPAGEAdBundle:Category c ORDER BY c.displayPriority ASC")
             ->getResult();
 
         return $result;

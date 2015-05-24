@@ -20,3 +20,7 @@ services:
         class: RAAFPAGE\AdBundle\Service\Fetcher\StatusFetcher
         arguments:
           - @doctrine.orm.entity_manager
+    raafpage.ad_bundle.fetcher.sub_category:
+        class: RAAFPAGE\AdBundle\Service\Fetcher\SubCategoryFetcher
+        arguments:
+          - @doctrine.orm.entity_manager

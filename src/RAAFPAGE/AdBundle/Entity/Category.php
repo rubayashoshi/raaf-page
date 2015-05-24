@@ -35,6 +35,11 @@ class Category
     protected $slug;
 
     /**
+     * @ORM\Column(name="display_priority", type="integer", length=10, nullable=false, options={"default": "0"})
+     */
+    protected $displayPriority;
+
+    /**
      * @return int
      */
     public function getId()
@@ -96,5 +101,25 @@ class Category
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+
+    /**
+     * @return integer
+     */
+    public function getDisplayPriority()
+    {
+        return $this->displayPriority;
+    }
+
+    /**
+     * @param integer $displayPriority
+     * @return Category
+     */
+    public function setDisplayPriority($displayPriority)
+    {
+        $this->displayPriority = $displayPriority;
+
+        return $this;
     }
 }

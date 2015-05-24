@@ -56,17 +56,29 @@ class AdController extends Controller
      */
     public function postAnAdd()
     {
-        return $this->render('RAAFPAGEAdBundle:Ad:postanad.html.twig');
+        $categories = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Category')
+            ->findAllCategories();
+
+        $subCategoryRepository = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:SubCategory');
+        $subCategoriesAsFlatArray = $subCategoryRepository->getAllSubCategories();
+
+        return $this->render(
+            'RAAFPAGEAdBundle:Ad:postanad.html.twig',
+            array(
+                'categories' => $categories,
+                'subCategories' => $subCategoriesAsFlatArray
+            )
+        );
     }
 
     /**
-     * Upload the ad
+     * Upload the ad under a specific subcategory
      *
-     * @Route("/ad/add", name="add_ad")
+     * @Route("/ad/add/{id}", name="add_ad")
      * @Template()
      * @todo move most of the code into a service to slim the controller action
      */
-    public function addAction()
+    public function addAction($id=null)
     {
         /** @var FileUploader $fileUploader */
         $fileUploader = $this->get('raafpage.adbundle.file_uploader');
@@ -108,6 +120,10 @@ class AdController extends Controller
                     //$fileUploader->attacheImageToProperty($property, $user->getId());
                 }
 
+                $subCategoryFetcher = $this->get('raafpage.ad_bundle.fetcher.sub_category');
+                $subCategory = $subCategoryFetcher->getById($id);
+                $property->setSubCategory($subCategory);
+
                 $property->setUser($user);
                 $adStatus = $this->getDoctrine()->getRepository('RAAFPAGEAdBundle:Status')
                     ->findOneBy(array('name' => 'live'));
@@ -126,7 +142,15 @@ class AdController extends Controller
 
         $images = $fileUploader->getImagesForNewAd($user->getId());
 
-        return array('form' => $form->createView(),'images' => $images, 'temporaryAdId' => $temporaryAdId,'property' => $property, 'types' => $types, 'error' => $error);
+        return array(
+            'form' => $form->createView(),
+            'images' => $images,
+            'temporaryAdId' => $temporaryAdId,
+            'property' => $property,
+            'types' => $types,
+            'error' => $error,
+            'id' => $id
+        );
     }
 
     /**

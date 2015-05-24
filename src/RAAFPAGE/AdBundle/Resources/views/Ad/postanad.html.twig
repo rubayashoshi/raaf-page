@@ -20,65 +20,53 @@
 {% block page_content %}
     <div id="post-ad-container">
         <div class="section-container">
-            <div class="list-item category" id="property">Property</div>
-            <div class="list-item category" id="jobs">Jobs</div>
-            <div class="list-item category" id="electronics">Electronics</div>
+            {% for category in categories %}
+                <div class="list-item category" id="{{ category.name|lower }}">{{ category.display }}</div>
+            {% endfor %}
         </div>
 
+       {% for category in categories %}
         <!-- level 1 -->
         <div class="section-container sub-category hide" id="property-content">
-            <div class="list-item subcategory" id="sub-category-1">To Rent</div>
-            <div class="list-item subcategory" id="sub-category-2">To Share</div>
-            <div class="list-item subcategory" id="sub-category-3">For Sale</div>
+            {% for subCategory in subCategories %}
+                {% if subCategory.category.id == category.id and  subCategory.depth == 1%}
+                    <div class="list-item subcategory" id="sub-category-{{ subCategory.id }}">{{ subCategory.display }}</div>
+                {% endif %}
+            {% endfor %}
         </div>
-        <div class="section-container sub-category hide" id="jobs-content">
-            <div class="list-item subcategory" id="sub-category-5">Telecommunication</div>
-            <div class="list-item subcategory" id="sub-category-6">Software Development</div>
-            <div class="list-item subcategory" id="sub-category-7">IT Support</div>
-        </div>
-
-        <div class="section-container sub-category hide" id="electronics-content">
-            <div class="list-item">Computers and others hardware</div>
-            <div class="list-item">Microwaves, Dishwasher and other kitchen stuffs</div>
-            <div class="list-item">Mobile and others</div>
-        </div>
+       {% endfor %}
         <!-- level 1 end -->
 
         <!-- level 2 -->
-        <div class="section-container hide subcategory-container" id="sub-category-1-content">
-            <div class="list-item subsubcategory" id="sub-sub-category-1">Offer rent</div>
-            <div class="list-item subsubcategory" id="sub-sub-category-2">Wanted</div>
-        </div>
-        <div class="section-container hide subcategory-container" id="sub-category-2-content">
-            <div class="list-item subsubcategory" id="sub-sub-category-3">Offer share</div>
-            <div class="list-item subsubcategory" id="sub-sub-category-4">Wanted</div>
-        </div>
-        <div class="section-container hide subcategory-container" id="sub-category-3-content">
-            <div class="list-item subsubcategory" id="sub-sub-category-5">Offer sale</div>
-            <div class="list-item subsubcategory" id="sub-sub-category-6">Wanted</div>
-        </div>
-        <!-- level 2 end-->
+        {% for category in categories %}
+            {% for subCategory in subCategories %}
+                {% if subCategory.category.id == category.id and  subCategory.depth == 1%}
+                <div class="section-container hide subcategory-container" id="sub-category-{{  subCategory.id }}-content">
+                    {% for subSubCategory in subCategories %}
+                        {% if subSubCategory.depth == 2 and subSubCategory.parent.id == subCategory.id %}
+                            <div class="list-item subsubcategory" id="sub-sub-category-{{ subSubCategory.id }}">{{ subSubCategory.display }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        <!-- level 2 end -->
 
         <!-- level 3 -->
-        <div class="section-container hide ads" id="sub-sub-category-1-content">
-            <div class="list-item">Studio Flats rent offered</div>
-            <div class="list-item">1 bedrooms</div>
-            <div class="list-item">2 bedrooms</div>
-            <div class="list-item">3 bedrooms</div>
-            <div class="list-item">4 bedrooms</div>
-            <div class="list-item">5 bedrooms</div>
-            <div class="list-item">5+ bedrooms</div>
-        </div>
-
-        <div class="section-container hide ads" id="sub-sub-category-2-content">
-            <div class="list-item">Studio Flats rent wanted</div>
-            <div class="list-item">1 bedrooms</div>
-            <div class="list-item">2 bedrooms</div>
-            <div class="list-item">3 bedrooms</div>
-            <div class="list-item">4 bedrooms</div>
-            <div class="list-item">5 bedrooms</div>
-            <div class="list-item">5+ bedrooms</div>
-        </div>
+        {% for category in categories %}
+            {% for subCategory in subCategories %}
+                {% if subCategory.category.id == category.id and  subCategory.depth == 2%}
+                    <div class="section-container hide ads" id="sub-sub-category-{{  subCategory.id }}-content">
+                        {% for subSubCategory in subCategories %}
+                            {% if subSubCategory.depth == 3 and subSubCategory.parent.id == subCategory.id %}
+                                <div class="list-item"><a href="{{ path('add_ad', { 'id': subSubCategory.id }) }}">{{ subSubCategory.display }}</a></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
         <!-- level 3 end-->
     </div>
 

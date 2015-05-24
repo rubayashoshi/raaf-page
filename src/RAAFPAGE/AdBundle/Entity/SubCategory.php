@@ -42,6 +42,11 @@ class SubCategory
     private $parent;
 
     /**
+     * @ORM\Column(name="depth", type="integer", nullable=false)
+     */
+    private $depth;
+
+    /**
      * @return int
      */
     public function getId()
@@ -120,4 +125,24 @@ class SubCategory
     {
         $this->parent = $parent;
     }
+
+    /**
+     * @return integer
+     */
+    public function getDepth()
+    {
+        return $this->depth;
+    }
+
+    /**
+     * @param integer $depth
+     * @return SubCategory
+     */
+    public function setDepth($depth)
+    {
+        $this->depth = $depth;
+
+        return $this;
+    }
+
 }
